@@ -5,7 +5,7 @@
 <br> 2. Простой интерфейс и настройка
 <hr>
 
-##Код использования.
+## Код использования.
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
@@ -31,7 +31,7 @@ $http_code  = $resp->http_code;
 
 
 
-#Использование.
+# Использование.
 
 Доступно 6 методов/запросов: GET, POST, PUT, PATCH, HEAD, DELETE  
 Все методы вызываются идентично.  
@@ -71,7 +71,7 @@ $object = $requester->get('www.andy87.ru/data')->asObject(); // object
 $array = $requester->get('www.andy87.ru/data')->asArray(); // array
 ```
 
-###Информация об ответе.
+### Информация об ответе.
 `Response::class`
 - ***response*** - оригинальный ответ на запрос
 - ***http_code*** - код ответа
@@ -85,7 +85,7 @@ $http_code  = $query->http_code; //Код ответа сервера
 $query  = $query->getQuery(); //Вернёт `Query` информацию о запросе.
 ```
 
-###Информация о запросе.
+### Информация о запросе.
 `Query::class`
  - **method** - метод запроса
  - **url** - адрес запроса
@@ -112,8 +112,8 @@ $isPost     = $query->isPost();
 ```
 
 
-##Дополнительные возможности
-###Тестовые данные
+## Дополнительные возможности
+### Тестовые данные
 - **setTestResponse( *string* $response, *int* $http_code )** - запрос не будет выполнен, вернётся ваш ответ.  
   - *string* $response - имитируемый ответ
   - *int* $http_code - имитируемый код ответа ( По умолчанию 200 )
@@ -124,7 +124,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setTestResponse(json_encode(['name'=>'Андрей', 'do'=>'code']), 302 )
     ...
 ```
-###Заголовки запроса
+### Заголовки запроса
 - **addHeaders( *array* $array )** - добавляются заголовки
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -133,7 +133,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->addHeaders(['Content-Type: application/json'])
     ...
 ```
-###Дополнительные cURL опции
+### Дополнительные cURL опции
 - **addCurlOptions( *array* $array )** - дополнительные опции cURL
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -142,7 +142,7 @@ $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
     ->addCurlOptions([ CURLOPT_FOLLOWLOCATION => true])
     ...
 ```
-###Использование Cookie
+### Использование Cookie
 - **useCookie( *string* $cookie, *string* $path )** - использование cookie
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -151,7 +151,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->useCookie('cookiename=cookievalue', '/tmp/cookies.txt')
     ... 
 ```
-###Использование Basic авторизации
+### Использование Basic авторизации
 - **setBasicAuth( *string* $token )** - Создание заголовка вторизации
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -160,7 +160,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setBasicAuth('token')
     ...
 ```
-###Отключение проверки SSL
+### Отключение проверки SSL
 - **disableSSL()** - отключение проверки SSL
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -169,7 +169,7 @@ $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
     ->disableSSL()
     ...  
 ```
-###Разрешение редиректа
+### Разрешение редиректа
 - **enableRedirect()** - разрешение на редирект, если ответ сервера требует редиректа   
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -178,7 +178,7 @@ $request = $curl->post( 'www.vk.com/806034')
     ->enableRedirect()
     ...
 ```
-###Подготовленные данные
+### Подготовленные данные
 - **prepareParams( *string* $postField )** данные для запроса не будут проходить обработку `http_build_query()` они будут считаться уже подготовленными для запроса
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -187,7 +187,7 @@ $request = $curl->post( 'www.vk.com/806034')
     ->prepareParams( http_build_query(['id' => 123]) )
     ...
 ```
-###callBack
+### callBack
 - **setCallback( *callable* $callback )** callback функция которая будет вызвана сразу после формирования ответа от сервера
 ```php
 /** @var andy87\curl_requester\Requester $curl */
@@ -201,7 +201,7 @@ $request = $curl->post('www.vk.com/806034')
 ```
 
 
-##Логирование запросов.
+## Логирование запросов.
 Логирование происходит через ORM/ActiveRecord класс, из константы `LOGGER` при заданной константе `LOGGER` в классе расширяющего `Curl`
 ```php
 /**
@@ -248,7 +248,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
 ```
 
 
-#Установка
+# Установка
 Добавить в `composer.json`  
 <small>require</small>
 ```
