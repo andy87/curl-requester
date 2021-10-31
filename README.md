@@ -60,13 +60,13 @@ $resp = $requester->get('www.andy87.ru')->response(); // string
 ```
 - Объект ( object )
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $object = $requester->get('www.andy87.ru/data')->asObject(); // object
 ```
 - Массив ( array )
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $array = $requester->get('www.andy87.ru/data')->asArray(); // array
 ```
@@ -76,7 +76,7 @@ $array = $requester->get('www.andy87.ru/data')->asArray(); // array
 - ***response*** - оригинальный ответ на запрос
 - ***http_code*** - код ответа
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $query = $requester->post( 'www.andy87.ru')->run(); //Вернёт `Response` информацию об ответе.
 
@@ -95,7 +95,7 @@ $query  = $query->getQuery(); //Вернёт `Query` информацию о з�
  - **response** - ответ сервера
  - **http_code** - код ответа сервера
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $query = $requester->post( 'www.andy87.ru')->run()->getQuery();
 
@@ -118,7 +118,7 @@ $isPost     = $query->isPost();
   - *string* $response - имитируемый ответ
   - *int* $http_code - имитируемый код ответа ( По умолчанию 200 )
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setTestResponse(json_encode(['name'=>'Андрей', 'do'=>'code']), 302 )
@@ -127,7 +127,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 ### Заголовки запроса
 - **addHeaders( *array* $array )** - добавляются заголовки
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->addHeaders(['Content-Type: application/json'])
@@ -136,7 +136,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 ### Дополнительные cURL опции
 - **addCurlOptions( *array* $array )** - дополнительные опции cURL
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // addCurlOptions
 $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
     ->addCurlOptions([ CURLOPT_FOLLOWLOCATION => true])
@@ -145,7 +145,7 @@ $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
 ### Использование Cookie
 - **useCookie( *string* $cookie, *string* $path )** - использование cookie
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // useCookie
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->useCookie('cookiename=cookievalue', '/tmp/cookies.txt')
@@ -154,7 +154,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 ### Использование Basic авторизации
 - **setBasicAuth( *string* $token )** - Создание заголовка вторизации
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // setBasicAuth
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setBasicAuth('token')
@@ -163,7 +163,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 ### Отключение проверки SSL
 - **disableSSL()** - отключение проверки SSL
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // disableSSL
 $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
     ->disableSSL()
@@ -172,7 +172,7 @@ $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
 ### Разрешение редиректа
 - **enableRedirect()** - разрешение на редирект, если ответ сервера требует редиректа   
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // enableRedirect
 $request = $curl->post( 'www.vk.com/806034')
     ->enableRedirect()
@@ -181,7 +181,7 @@ $request = $curl->post( 'www.vk.com/806034')
 ### Подготовленные данные
 - **prepareParams( *string* $postField )** данные для запроса не будут проходить обработку `http_build_query()` они будут считаться уже подготовленными для запроса
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // enableRedirect
 $request = $curl->post( 'www.vk.com/806034')
     ->prepareParams( http_build_query(['id' => 123]) )
@@ -190,7 +190,7 @@ $request = $curl->post( 'www.vk.com/806034')
 ### callBack
 - **setCallback( *callable* $callback )** callback функция которая будет вызвана сразу после формирования ответа от сервера
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // enableRedirect
 $request = $curl->post('www.vk.com/806034')
     ->setCallback( function ( Query $query ){
