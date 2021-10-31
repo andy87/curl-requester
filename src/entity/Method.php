@@ -377,6 +377,6 @@ abstract class Method
      */
     public function initCallBack( Query $query )
     {
-        call_user_func( $this->callBack, $query );
+        if ( $this->callBack ) call_user_func( $this->callBack, $query );
     }
 }

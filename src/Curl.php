@@ -44,10 +44,10 @@ class Curl
      * Magic
      *
      * @param string $name
-     * @param mixed $arg
+     * @param array $arg
      * @return null|Delete|Get|Head|Method|Patch|Post|Put
      */
-    public function __call( string $name, mixed $arg )
+    public function __call( string $name, $arg = [] )
     {
         $method = strtoupper($name);
 
