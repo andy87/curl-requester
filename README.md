@@ -268,7 +268,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
             "version"               : "1.0.0",
             "source"                : {
                 "type"                  : "git",
-                "reference"             : "master",
+                "reference"             : "main",
                 "url"                   : "https://github.com/andy87/curl-requester"
             },
             "autoload": {
