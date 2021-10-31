@@ -249,7 +249,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
 
 
 # Установка
-Уставновка с помощью [composer](https://getcomposer.org/download/)  
+Установка с помощью [composer](https://getcomposer.org/download/)  
 
 Добавить в `composer.json`  
 <small>require</small>
