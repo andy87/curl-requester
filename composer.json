@@ -1,0 +1,17 @@
+{
+  "require"     : {
+    "php"         : ">=7.4",
+    "ext-curl"    : "*",
+    "ext-json"    : "*",
+    "ext-mbstring": "*"
+  },
+  "name"        : "andy87/curl-requester",
+  "description" : "Decorator for curl requests",
+  "version"     : "1.0.0",
+  "repositories": [
+    {
+      "type"      : "vcs",
+      "url"       : "https://github.com/andy87/curl-requester"
+    }
+  ]
+}
