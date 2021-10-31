@@ -42,7 +42,7 @@ $http_code  = $resp->http_code;
 - *bool* **logger_status** - Статус активности логгера по умолчанию *(не обязательный)*
  
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 // Конструктор: простой запрос
 $requester->get('https://andy87.ru');
 
@@ -54,7 +54,7 @@ $requester->post('www.andy87.ru/search', [ 'text' => 'php' ])
 Возможно получить ответ тремя типами:
 - Текст ( string )
 ```php
-/** @var andy87\curl_requester\Requester $curl */
+/** @var andy87\curl_requester\Curl $curl */
 
 $resp = $requester->get('www.andy87.ru')->response(); // string
 ```
