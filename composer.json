@@ -6,8 +6,8 @@
     "ext-mbstring": "*"
   },
   "name"        : "andy87/curl-requester",
-  "description" : "Decorator for curl requests",
-  "version"     : "1.0.0",
+  "description" : "Decorator/Builder for curl requests",
+  "version"     : "1.0.1",
   "repositories": [
     {
       "type"      : "vcs",
