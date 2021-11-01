@@ -9,6 +9,8 @@ namespace andy87\curl_requester\entity;
  *
  * @property-read ?string $response
  * @property-read ?int $http_code
+ *
+ * @package andy87\curl_requester\entity
  */
 class Response
 {

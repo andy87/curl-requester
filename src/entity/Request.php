@@ -8,6 +8,11 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  *  Class `Request`
  *
  *  Базовый функционал отправки запроса, получения ответа
+ *
+ * @property ?string $logger
+ * @property object|Method|Get|Post|Put|Patch|Head|Delete $query
+ *
+ * @package andy87\curl_requester\entity
  */
 class Request
 {
@@ -31,6 +36,19 @@ class Request
         $this->logger = $logger;
     }
 
+    /**
+     * @param string $url
+     * @param array $options
+     * @return resource
+     */
+    public static function createCurlHandler(string $url, array $options = [] )
+    {
+        $ch = curl_init( $url );
+
+        curl_setopt_array( $ch, $options );
+
+        return $ch;
+    }
 
 
     /**
@@ -63,9 +81,7 @@ class Request
 
         } else {
 
-            $ch = curl_init( $query->url );
-
-            foreach ( $query->curlOptions as $option => $value ) curl_setopt( $ch, $option, $value );
+            $ch = self::createCurlHandler( $query->url, $query->curlOptions );
 
             $query->response  = curl_exec( $ch );
             $query->http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );

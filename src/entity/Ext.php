@@ -3,7 +3,12 @@
 namespace andy87\curl_requester\entity;
 
 /**
+ * Class `Ext`
  *  Расширеный функционал
+ *
+ * @property bool $params_is_ready если данные уже готовы и их не надо `http_build_query` ставится `TRUE`
+ *
+ * @package andy87\curl_requester\entity
  */
 abstract class Ext extends Method
 {
@@ -48,6 +53,7 @@ abstract class Ext extends Method
 
 
     /**
+     * Установить значение доп.данных запроса
      * @param string $group
      * @return Ext
      */
@@ -59,6 +65,8 @@ abstract class Ext extends Method
     }
 
     /**
+     * Установить значение доп.данных запроса
+     *
      * @param string $comment
      * @return Ext
      */

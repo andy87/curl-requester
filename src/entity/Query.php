@@ -21,7 +21,7 @@ namespace andy87\curl_requester\entity;
  * @method isHead()
  * @method isDelete()
  *
- * @package andy87\src
+ * @package andy87\curl_requester\entity
  */
 class Query
 {

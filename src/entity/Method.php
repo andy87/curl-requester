@@ -3,7 +3,19 @@
 namespace andy87\curl_requester\entity;
 
 /**
+ *  Class `Method`
  *
+ *
+ * @property ?string $logger ORM/ActiveRecord логгер запросов
+ * @property bool $logger_status Статус активности логгера по умолчанию
+ * @property Query $query Данные запроса
+ * @property ?string $group дополнительные данные для лога
+ * @property ?string $comment дополнительные данные для лога
+ * @property $callBack Функция вызываемая после запроса
+ * @property ?string $testResponse Тестовый ответ
+ * @property ?int $testHttpCode Тестовый код ответа
+ *
+ * @package andy87\curl_requester\entity
  */
 abstract class Method
 {
@@ -15,6 +27,7 @@ abstract class Method
     const DELETE = 'DELETE';
     const PATCH  = 'PATCH';
 
+    /** @var string Установка метода запроса */
     const SELF_METHOD = self::GET;
 
 
@@ -44,7 +57,7 @@ abstract class Method
     /** @var string|null Тестовый ответ */
     public ?string $testResponse = null;
 
-    /** @var int|null Тестовый ответ (код) */
+    /** @var int|null Тестовый код ответа */
     public ?int $testHttpCode = null;
 
 
@@ -106,7 +119,8 @@ abstract class Method
     }
 
     /**
-     *  Устрановить значение для `группы` используемого при логировании
+     * Получить значение доп. данных запроса
+     *      используемого при логировании
      *
      * @return ?string
      */
@@ -116,7 +130,8 @@ abstract class Method
     }
 
     /**
-     *  Устрановить значение для `комментария` используемого при логировании
+     *  Получить значение доп. данных запроса
+     *      используемого при логировании
      *
      * @return ?string
      */
@@ -249,7 +264,6 @@ abstract class Method
     }
 
     /**
-     * TODO: SSL fix
      * игнорирование сертификатов
      *
      * @return $this
@@ -284,6 +298,8 @@ abstract class Method
     }
 
     /**
+     * Установить функцию вызываемую после запроса
+     *
      * @param callable $callback
      * @return $this
      */

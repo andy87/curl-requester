@@ -11,14 +11,14 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  *  Строитель/Декоратор над вызовами cURL функций
  *  Единая точка входа для осуществления запросов
  *
- * @method Get get( string $url, array $params, ?string $logger, ?bool $logger_status )
- * @method Post post( string $url, array $params, ?string $logger, ?bool $logger_status )
- * @method Put put( string $url, array $params, ?string $logger, ?bool $logger_status )
- * @method Patch patch( string $url, array $params, ?string $logger, ?bool $logger_status )
- * @method Head head( string $url, array $params, ?string $logger, ?bool $logger_status )
- * @method Delete delete( string $url, array $params, ?string $logger, ?bool $logger_status )
+ * @method Get get( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Post post( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Put put( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Patch patch( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Head head( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Delete delete( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
  *
- * @package andy87\src
+ * @package andy87\curl_requester
  */
 class Curl
 {
@@ -47,18 +47,15 @@ class Curl
      * @param array $arg
      * @return null|Delete|Get|Head|Method|Patch|Post|Put
      */
-    public function __call( string $name, $arg = [] )
+    public function __call( string $name, array $arg = [] )
     {
         $method = strtoupper($name);
 
-        if ( isset( self::METHOD_LIST[ $method ] ) )
+        if ( $method = ( static::METHOD_LIST[ $method ] ?? null ) )
         {
-            $method = self::METHOD_LIST[ $method ];
-
             $url  = $arg[0];
-            $data = $arg[1] ?? [];
-
-            $url = ( $method == Get::class ) ? $this->constructUri( $url, $data ) : $this->constructUri( $url );
+            $data = ( ( $method === Get::class ) ? ( $arg[1] ?? null ) : null ) ;
+            $url  = $this->constructUri( $url, $data );
 
             return new $method( $url, $data, static::LOGGER, static::DEFAULT_LOGGER_STATUS );
         }
