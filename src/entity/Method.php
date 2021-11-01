@@ -5,6 +5,7 @@ namespace andy87\curl_requester\entity;
 /**
  *  Class `Method`
  *
+ *  Общий/родительский класс с базовым функционалом
  *
  * @property ?string $logger ORM/ActiveRecord логгер запросов
  * @property bool $logger_status Статус активности логгера по умолчанию
@@ -36,7 +37,7 @@ abstract class Method
     protected ?string $logger;
 
     /** @var bool Статус активности логгера по умолчанию */
-    protected bool $logger_status;
+    protected bool $logger_status = false;
 
 
     /** @var Query Данные запроса */
@@ -61,15 +62,16 @@ abstract class Method
     public ?int $testHttpCode = null;
 
 
+    
     /**
      * Construct
      *
-     * @param string $url
-     * @param ?array $data
+     * @param string $url куда слать запрос
+     * @param ?array $data параметры/данные запроса
      * @param ?string $logger ORM/ActiveRecord ЛОггер запросов
-     * @param ?bool $logger_status
+     * @param ?bool $logger_status Статус активности логгера по умолчанию
      */
-    public function __construct(string $url, ?array $data = null, ?string $logger = null, ?bool $logger_status = null )
+    public function __construct(string $url, ?array $data = null, ?string $logger = null, ?bool $logger_status = false )
     {
         $this->query = new Query();
 
@@ -256,7 +258,7 @@ abstract class Method
      *
      * @return $this
      */
-    public function addContentType( string  $type ): self
+    public function addContentType( string $type ): self
     {
         $this->addHeaders([ 'Content-Type: ' . $type ]);
 
@@ -317,45 +319,45 @@ abstract class Method
     /**
      * Отправка запроса
      *
-     * @param ?bool $use_logger TRUE = писать логи / FALSE = не писать логи
+     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return Response
      */
-    public function run( ?bool $use_logger = null ): Response
+    public function run( ?bool $is_use_logger = null ): Response
     {
-        return ( new Request( $this, $this->logger ) )->run( $use_logger ?? $this->logger_status );
+        return ( new Request( $this, $this->logger ) )->run( $is_use_logger ?? $this->logger_status );
     }
 
     /**
      * Получение ответа на запрос
      *
-     * @param ?bool $use_logger TRUE = писать логи / FALSE = не писать логи
+     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?string
      */
-    public function response( ?bool $use_logger = null ): ?string
+    public function response( ?bool $is_use_logger = null ): ?string
     {
-        return $this->run( $use_logger ?? $this->logger_status )->response;
+        return $this->run( $is_use_logger )->response;
     }
 
     /**
      * Получение ответа на запрос в формате `Object`
      *
-     * @param ?bool $use_logger TRUE = писать логи / FALSE = не писать логи
+     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?object
      */
-    public function asObject( ?bool $use_logger = null ): ?object
+    public function asObject( ?bool $is_use_logger = null ): ?object
     {
-        return $this->run( $use_logger ?? $this->logger_status )->asObject();
+        return $this->run( $is_use_logger )->asObject();
     }
 
     /**
      * Получение ответа на запрос в формате `Array`
      *
-     * @param ?bool $use_logger TRUE = писать логи / FALSE = не писать логи
+     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?array
      */
-    public function asArray( ?bool $use_logger = null ): ?array
+    public function asArray( ?bool $is_use_logger = null ): ?array
     {
-        return $this->run( $use_logger ?? $this->logger_status )->asObject( true );
+        return $this->run( $is_use_logger )->asObject( true );
     }
 
 

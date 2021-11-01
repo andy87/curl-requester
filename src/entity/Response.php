@@ -32,6 +32,8 @@ class Response
     }
 
     /**
+     * Magic
+     *
      * @param $name
      * @return mixed
      */
