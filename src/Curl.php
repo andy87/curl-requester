@@ -11,12 +11,12 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  *  Строитель/Декоратор над вызовами cURL функций
  *  Единая точка входа для осуществления запросов
  *
- * @method Get get( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
- * @method Post post( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
- * @method Put put( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
- * @method Patch patch( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
- * @method Head head( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
- * @method Delete delete( string $url, array $params = [], ?string $logger = null, ?bool $logger_status = null )
+ * @method Get get( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Post post( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Put put( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Patch patch( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Head head( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Delete delete( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
  *
  * @package andy87\curl_requester
  */
@@ -54,8 +54,8 @@ class Curl
         if ( $method = ( static::METHOD_LIST[ $method ] ?? null ) )
         {
             $url  = $arg[0];
-            $data = ( ( $method === Get::class ) ? ( $arg[1] ?? null ) : null ) ;
-            $url  = $this->constructUri( $url, $data );
+            $data = $arg[1];
+            $url  = $this->constructUri( $url, ( ( $method === Get::class ) ? $data : [] ) );
 
             return new $method( $url, $data, static::LOGGER, static::DEFAULT_LOGGER_STATUS );
         }
