@@ -20,9 +20,9 @@ abstract class Ext extends Method
      * Construct
      *
      * @param string $url
-     * @param array|null $data
-     * @param string|null $logger
-     * @param bool|null $logger_status
+     * @param ?array $data
+     * @param ?string $logger
+     * @param ?bool $logger_status
      */
     public function __construct( string $url, ?array $data = null, ?string $logger = null, ?bool $logger_status = false )
     {
