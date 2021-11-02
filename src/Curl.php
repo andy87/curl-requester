@@ -54,7 +54,7 @@ class Curl
         if ( $method = ( static::METHOD_LIST[ $method ] ?? null ) )
         {
             $url  = $arg[0];
-            $data = $arg[1];
+            $data = $arg[1] ?? [];
             $url  = $this->constructUri( $url, ( ( $method === Get::class ) ? $data : [] ) );
 
             return new $method( $url, $data, static::LOGGER, static::DEFAULT_LOGGER_STATUS );
