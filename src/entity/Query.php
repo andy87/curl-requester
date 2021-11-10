@@ -13,6 +13,7 @@ namespace andy87\curl_requester\entity;
  * @property array $curlOptions
  * @property ?string $response
  * @property ?int $http_code
+ * @property array $info
  *
  * @method isGet()
  * @method isPost()
@@ -45,6 +46,11 @@ class Query
 
     /** @var ?int код ответа сервера */
     public ?int $http_code = null;
+
+    /** @var array Список информации о запросе из curl_getinfo */
+    public array $info = [
+        CURLINFO_HTTP_CODE
+    ];
 
 
     /**

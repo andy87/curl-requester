@@ -84,9 +84,17 @@ class Request
             $ch = self::createCurlHandler( $query->url, $query->curlOptions );
 
             $query->response  = curl_exec( $ch );
-            $query->http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
+            $info = [];
+            foreach ( $this->query->info as $code )
+            {
+                $info[ $code ] = curl_getinfo( $ch, $code );
+            }
             curl_close($ch);
+
+            $query->info = $info;
+
+            $query->http_code = $query->info[ CURLINFO_HTTP_CODE ];
 
             $this->query->initCallBack( $query );
         }

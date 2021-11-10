@@ -182,7 +182,7 @@ $request = $curl->post( 'www.vk.com/806034')
 - **prepareParams( *string* $postField )** данные для запроса не будут проходить обработку `http_build_query()` они будут считаться уже подготовленными для запроса
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// enableRedirect
+// prepareParams
 $request = $curl->post( 'www.vk.com/806034')
     ->prepareParams( http_build_query(['id' => 123]) )
     ...
@@ -191,13 +191,24 @@ $request = $curl->post( 'www.vk.com/806034')
 - **setCallback( *callable* $callback )** callback функция которая будет вызвана сразу после формирования ответа от сервера
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// enableRedirect
+// setCallback
 $request = $curl->post('www.vk.com/806034')
     ->setCallback( function ( Query $query ){
         echo PHP_EOL . "Response: " . $query->response 
             . "\nCode: " . $query->http_code;
     })
+    ...
+```
+### addCurlInfo
+- **addCurlInfo( *array* $curl_info )** Дополняет список информации по запросу которую надо получить
+```php
+/** @var andy87\curl_requester\Curl $curl */
+// enableRedirect
+$request = $curl->post('www.vk.com/806034')
+    ->addCurlInfo([CURLINFO_EFFECTIVE_URL])
     ->run();
+
+$last_url = $request->getQuery()->info[ CURLINFO_EFFECTIVE_URL ];
 ```
 
 
@@ -256,7 +267,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
 ```
 "require": {
     ...
-    "andy87/curl-requester" : "1.0.1"
+    "andy87/curl-requester" : "1.0.2"
 },
 ```
 <small>repositories</small>
@@ -267,7 +278,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
         "type"                  : "package",
         "package"               : {
             "name"                  : "andy87/curl-requester",
-            "version"               : "1.0.1",
+            "version"               : "1.0.2",
             "source"                : {
                 "type"                  : "git",
                 "reference"             : "main",

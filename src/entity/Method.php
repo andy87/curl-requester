@@ -16,7 +16,7 @@ namespace andy87\curl_requester\entity;
  * @property ?string $testResponse Тестовый ответ
  * @property ?int $testHttpCode Тестовый код ответа
  *
- * @package andy87\curl_requester\entity
+ * @package common\components\curl_requester\entity
  */
 abstract class Method
 {
@@ -43,10 +43,10 @@ abstract class Method
     /** @var Query Данные запроса */
     protected Query $query;
 
-    /** @var string|null дополнительные данные для лога */
+    /** @var ?string дополнительные данные для лога */
     protected ?string $group = null;
 
-    /** @var string|null дополнительные данные для лога */
+    /** @var ?string дополнительные данные для лога */
     protected ?string $comment = null;
 
     /** @var ?callback Функция вызываемая после запроса */
@@ -62,7 +62,7 @@ abstract class Method
     public ?int $testHttpCode = null;
 
 
-    
+
     /**
      * Construct
      *
@@ -120,6 +120,18 @@ abstract class Method
         return $this;
     }
 
+
+    /**
+     * @param string $group
+     * @return static
+     */
+    public function setGroup( string $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
     /**
      * Получить значение доп. данных запроса
      *      используемого при логировании
@@ -129,6 +141,18 @@ abstract class Method
     public function getGroup(): ?string
     {
         return $this->group;
+    }
+
+
+    /**
+     * @param string $comment
+     * @return static
+     */
+    public function setComment( string $comment ): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     /**
@@ -170,7 +194,7 @@ abstract class Method
      * Установить данные для `headers`
      *
      * @param array $headers
-     * @return $this
+     * @return static
      */
     public function addHeaders(array $headers = [] ): self
     {
@@ -196,7 +220,7 @@ abstract class Method
      *      'Authorization: Basic ...'
      *
      * @param string $token
-     * @return $this
+     * @return static
      */
     public function setBasicAuth( string $token ): self
     {
@@ -209,7 +233,7 @@ abstract class Method
      * Установить данные для cURL опций
      *
      * @param array $options
-     * @return $this
+     * @return static
      */
     public function addCurlOptions(array $options = [] ): self
     {
@@ -226,7 +250,7 @@ abstract class Method
      *
      * @param string $cookie
      * @param string $path
-     * @return $this
+     * @return static
      */
     public function useCookie( string $cookie, string $path ): self
     {
@@ -242,7 +266,7 @@ abstract class Method
     /**
      * Разрешить переходить при редиректе
      *
-     * @return $this
+     * @return static
      */
     public function enableRedirect(): self
     {
@@ -256,7 +280,7 @@ abstract class Method
      *
      * @param string $type
      *
-     * @return $this
+     * @return static
      */
     public function addContentType( string $type ): self
     {
@@ -268,7 +292,7 @@ abstract class Method
     /**
      * игнорирование сертификатов
      *
-     * @return $this
+     * @return static
      */
     public function disableSSL(): self
     {
@@ -289,7 +313,7 @@ abstract class Method
      * @param string $response
      * @param int $code
      *
-     * @return $this
+     * @return static
      */
     public function setTestResponse( string $response, int $code = 200 ): self
     {
@@ -303,11 +327,24 @@ abstract class Method
      * Установить функцию вызываемую после запроса
      *
      * @param callable $callback
-     * @return $this
+     * @return static
      */
     public function setCallback( callable $callback ): self
     {
         $this->callBack = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Дополняет список информации по запросу которую надо получить
+     *
+     * @param array $curl_info
+     * @return static
+     */
+    public function addCurlInfo( array $curl_info ): self
+    {
+        $this->query->info = array_merge( $this->query->info, $curl_info );
 
         return $this;
     }

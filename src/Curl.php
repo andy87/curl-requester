@@ -22,7 +22,7 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  */
 class Curl
 {
-    /** @var ?string ORM/ActiveRecord ЛОггер запросов */
+    /** @var ?string ORM/ActiveRecord логгер запросов */
     const LOGGER = null;
 
     /** @var bool Статус активности логгера по умолчанию  */
@@ -51,7 +51,7 @@ class Curl
     {
         $method = strtoupper($name);
 
-        if ( $method = ( static::METHOD_LIST[ $method ] ?? null ) )
+        if ( isset( static::METHOD_LIST[ $method ] ) )
         {
             $url  = $arg[0];
             $data = $arg[1] ?? [];
