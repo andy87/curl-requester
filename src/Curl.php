@@ -51,7 +51,7 @@ class Curl
     {
         $method = strtoupper($name);
 
-        if ( isset( static::METHOD_LIST[ $method ] ) )
+        if ( $method = ( static::METHOD_LIST[$method] ?? false ) )
         {
             $url  = $arg[0];
             $data = $arg[1] ?? [];
