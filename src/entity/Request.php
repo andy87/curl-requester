@@ -86,10 +86,9 @@ class Request
             $query->response  = curl_exec( $ch );
 
             $info = [];
-            foreach ( $this->query->info as $code )
-            {
-                $info[ $code ] = curl_getinfo( $ch, $code );
-            }
+
+            foreach ( $query->info as $code ) $info[ $code ] = curl_getinfo( $ch, $code );
+
             curl_close($ch);
 
             $query->info = $info;
