@@ -267,7 +267,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
 ```
 "require": {
     ...
-    "andy87/curl-requester" : "1.0.2"
+    "andy87/curl-requester" : "1.0.3"
 },
 ```
 <small>repositories</small>
@@ -278,7 +278,7 @@ $resp = $R->post( 'www.vk.com/806034')->asArray();
         "type"                  : "package",
         "package"               : {
             "name"                  : "andy87/curl-requester",
-            "version"               : "1.0.2",
+            "version"               : "1.0.3",
             "source"                : {
                 "type"                  : "git",
                 "reference"             : "main",
