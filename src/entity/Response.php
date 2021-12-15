@@ -8,18 +8,23 @@ namespace andy87\curl_requester\entity;
  *  Класс аозвращается как ответ на запрос
  *
  * @property-read ?string $response
- * @property-read ?int $http_code
+ * @property-read ?int $httpCode
  *
  * @package andy87\curl_requester\entity
  */
 class Response
 {
+    // Property
+
     /** @var Query свойства запроса */
     private Query $query;
 
     /** @var array $propertyList свойства доступные через метод __get() */
-    private array $propertyList = ['response', 'http_code'];
+    private array $propertyList = ['response', 'httpCode'];
 
+
+
+    // Magic
 
     /**
      * Construct
@@ -44,6 +49,9 @@ class Response
             : null;
     }
 
+
+
+    // Methods
 
     /**
      * возвращает ответ сервера как объект
@@ -70,8 +78,6 @@ class Response
     {
         return $this->asObject( true );
     }
-
-
 
     /**
      * Метод возвращает объект запроса

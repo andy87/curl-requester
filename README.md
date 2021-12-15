@@ -10,23 +10,19 @@
 /** @var andy87\curl_requester\Curl $curl */
 
 //GET зпрос
-$response = $curl->get( 'vk.com/id806034' )
-    ->response(); // string
+$response = $curl->get( 'vk.com/id806034' )->response(); // string
 
 // Получение ответа в качестве объекта с запросом методом POST
-$object = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])
-    ->run()
-    ->asObject(); // object
-
+$object = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])->run()->asObject(); // object
 
 // Имитация запроса методом PATCH с получением тестовых данных
-$resp = $curl->patch( 'vk.com/user/get', ['id' => 806034])
+$request = $curl->patch( 'vk.com/user/get', ['id' => 806034])
     ->setTestResponse('{"name" : "Андрей", "do" : "code"}')
     ->run();
 
 //Получение данных
-$response   = $resp->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$http_code  = $resp->http_code;
+$response   = $request->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
+$http_code  = $request->http_code;
 ```
 
 
@@ -51,42 +47,40 @@ $requester->post('www.andy87.ru/search', [ 'text' => 'php' ])
 ```
 
 2. Ответ(***response***).  
-Возможно получить ответ тремя типами:
+Возможно получить ответ несколькими способами:
 - Текст ( string )
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
 $resp = $requester->get('www.andy87.ru')->response(); // string
 ```
-- Объект ( object )
+- Преобразует ответ в объект( object )
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
 $object = $requester->get('www.andy87.ru/data')->asObject(); // object
 ```
-- Массив ( array )
+- Преобразует ответ в массив( array )
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
 $array = $requester->get('www.andy87.ru/data')->asArray(); // array
 ```
 
-### Информация об ответе.
-`Response::class`
+### Информация об ответе.`Response::class`
 - ***response*** - оригинальный ответ на запрос
 - ***http_code*** - код ответа
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$query = $requester->post( 'www.andy87.ru')->run(); //Вернёт `Response` информацию об ответе.
+$request = $requester->post( 'www.andy87.ru')->run(); //Вернёт `Response` информацию об ответе.
 
-$response   = $query->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$http_code  = $query->http_code; //Код ответа сервера
-$query  = $query->getQuery(); //Вернёт `Query` информацию о запросе.
+$response   = $request->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
+$http_code  = $request->http_code; //Код ответа сервера
+$query  = $request->getQuery(); //Вернёт `Query` информацию о запросе.
 ```
 
-### Информация о запросе.
-`Query::class`
+### Информация о запросе.`Query::class`
  - **method** - метод запроса
  - **url** - адрес запроса
  - **postFields** - данные запроса
@@ -108,9 +102,8 @@ $response   = $query->response;
 $http_code  = $query->http_code;
 
 $isPost     = $query->isPost();
-//... и т.д.
+//... и т.д. ( isGet(), isPut() ... )
 ```
-
 
 ## Дополнительные возможности
 ### Тестовые данные
@@ -137,7 +130,7 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 - **addCurlOptions( *array* $array )** - дополнительные опции cURL
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// addCurlOptions
+
 $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
     ->addCurlOptions([ CURLOPT_FOLLOWLOCATION => true])
     ...
@@ -146,7 +139,7 @@ $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
 - **useCookie( *string* $cookie, *string* $path )** - использование cookie
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// useCookie
+
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->useCookie('cookiename=cookievalue', '/tmp/cookies.txt')
     ... 
@@ -155,16 +148,16 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 - **setBasicAuth( *string* $token )** - Создание заголовка вторизации
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// setBasicAuth
+
 $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
-    ->setBasicAuth('token')
+    ->setBasicAuth('eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9')
     ...
 ```
 ### Отключение проверки SSL
 - **disableSSL()** - отключение проверки SSL
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// disableSSL
+
 $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
     ->disableSSL()
     ...  
@@ -173,91 +166,47 @@ $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
 - **enableRedirect()** - разрешение на редирект, если ответ сервера требует редиректа   
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// enableRedirect
+
 $request = $curl->post( 'www.vk.com/806034')
     ->enableRedirect()
     ...
 ```
 ### Подготовленные данные
-- **prepareParams( *string* $postField )** данные для запроса не будут проходить обработку `http_build_query()` они будут считаться уже подготовленными для запроса
+- **prepareParams( *string* $postField )** - данные для запроса не будут проходить обработку `http_build_query()` они будут считаться уже подготовленными для запроса
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// prepareParams
+
 $request = $curl->post( 'www.vk.com/806034')
     ->prepareParams( http_build_query(['id' => 123]) )
     ...
 ```
-### callBack
-- **setCallback( *callable* $callback )** callback функция которая будет вызвана сразу после формирования ответа от сервера
+### Установка callBack функции
+- **setCallback( *callable* $callback )** - callback функция которая будет вызвана сразу после формирования ответа от сервера
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// setCallback
+
 $request = $curl->post('www.vk.com/806034')
     ->setCallback( function ( Query $query ){
-        echo PHP_EOL . "Response: " . $query->response 
-            . "\nCode: " . $query->http_code;
+        echo PHP_EOL . "Response: " . $query->response . "\nCode: " . $query->http_code;
     })
     ...
 ```
-### addCurlInfo
-- **addCurlInfo( *array* $curl_info )** Дополняет список информации по запросу которую надо получить
+### Получение информации по запросу. 
+- **addCurlInfo( *array* $curl_info )** - Дополняет список информации по запросу которую надо получить
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-// enableRedirect
+
 $request = $curl->post('www.vk.com/806034')
-    ->addCurlInfo([CURLINFO_EFFECTIVE_URL])
+    ->addCurlInfo([CURLINFO_EFFECTIVE_URL]) // Добавление необходимой информации к ответу
     ->run();
 
-$last_url = $request->getQuery()->info[ CURLINFO_EFFECTIVE_URL ];
+$last_url = $request->getQuery()->info[ CURLINFO_EFFECTIVE_URL ]; //Получение информации 
 ```
 
-
-## Логирование запросов.
-Логирование происходит через ORM/ActiveRecord класс, из константы `LOGGER` при заданной константе `LOGGER` в классе расширяющего `Curl`
-```php
-/**
- * Класс у которого логирование по умолчанию включено
- */
-class CurlRequestWithLogger extends andy87\curl_requester\Curl {
-    const LOGGER = Log::class; // класс логера
-    const DEFAULT_LOGGER_STATUS = true; // статус логирования
-} 
-
-/** @var CurlRequestWithLogger $R */
-$resp = $R->post( 'www.vk.com/806034')->run(false); // Не логировать запрос
-
-$resp = $R->post( 'www.vk.com/806034')->response();
-$resp = $R->post( 'www.vk.com/806034')->response(false);  // Не логировать запрос
-
-$resp = $R->post( 'www.vk.com/806034')->asObject();
-$resp = $R->post( 'www.vk.com/806034')->asObject(false);  // Не логировать запрос
-
-$resp = $R->post( 'www.vk.com/806034')->asArray();
-$resp = $R->post( 'www.vk.com/806034')->asArray(false); // Не логировать запрос
-```
-
-```php
-/**
- * Класс у которого логирование по умолчанию выключено
- */
-class CurlRequestWithLogger extends andy87\curl_requester\Requester {
-    const LOGGER = Log::class; // класс логера
-    const DEFAULT_LOGGER_STATUS = false; // статус логирования
-} 
-
-/** @var CurlRequestWithLogger $R */
-$resp = $R->post( 'www.vk.com/806034')->run(true); // Логировать запрос
-
-$resp = $R->post( 'www.vk.com/806034')->response(true); // Логировать запрос
-$resp = $R->post( 'www.vk.com/806034')->response();
-
-$resp = $R->post( 'www.vk.com/806034')->asObject(true); // Логировать запрос
-$resp = $R->post( 'www.vk.com/806034')->asObject();
-
-$resp = $R->post( 'www.vk.com/806034')->asArray(true); // Логировать запрос
-$resp = $R->post( 'www.vk.com/806034')->asArray();
-```
-
+# Зависимости
+- php ( >= 7.4 )
+- ext-curl
+- ext-json
 
 # Установка
 Установка с помощью [composer](https://getcomposer.org/download/)  

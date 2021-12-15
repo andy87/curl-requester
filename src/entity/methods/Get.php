@@ -16,13 +16,10 @@ class Get extends Method
     /**
      * Получение ответа на запрос
      *
-     * @param ?bool $use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?string
      */
-    public function response( ?bool $use_logger = null ): ?string
+    public function response(): ?string
     {
-        if ( !$use_logger ) return file_get_contents( $this->query->url );
-
-        return $this->run( $use_logger ?? $this->logger_status )->response;
+        return $this->run()->response;
     }
 }

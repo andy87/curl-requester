@@ -7,71 +7,57 @@ namespace andy87\curl_requester\entity;
  *
  *  Общий/родительский класс с базовым функционалом
  *
- * @property ?string $logger ORM/ActiveRecord логгер запросов
- * @property bool $logger_status Статус активности логгера по умолчанию
  * @property Query $query Данные запроса
- * @property ?string $group дополнительные данные для лога
- * @property ?string $comment дополнительные данные для лога
- * @property $callBack Функция вызываемая после запроса
- * @property ?string $testResponse Тестовый ответ
- * @property ?int $testHttpCode Тестовый код ответа
+ * @property array $tests Тестовый ответ
+ * @property ?callable $callBack Функция вызываемая после запроса
  *
  * @package common\components\curl_requester\entity
  */
 abstract class Method
 {
+    // Constants
+
     /** @var string список методов */
-    const GET    = 'GET';
-    const POST   = 'POST';
-    const PUT    = 'PUT';
-    const HEAD   = 'HEAD';
-    const DELETE = 'DELETE';
-    const PATCH  = 'PATCH';
+    const GET           = 'GET';
+    const POST          = 'POST';
+    const PUT           = 'PUT';
+    const HEAD          = 'HEAD';
+    const DELETE        = 'DELETE';
+    const PATCH         = 'PATCH';
+
+    const KEY_RESPONSE  = 'response';
+    const KEY_HTTP_CODE = 'httpCode';
 
     /** @var string Установка метода запроса */
-    const SELF_METHOD = self::GET;
+    const SELF_METHOD   = self::GET;
 
 
 
-    /** @var ?string ORM/ActiveRecord логгер запросов */
-    protected ?string $logger;
-
-    /** @var bool Статус активности логгера по умолчанию */
-    protected bool $logger_status = false;
-
+    // Property
 
     /** @var Query Данные запроса */
     protected Query $query;
 
-    /** @var ?string дополнительные данные для лога */
-    protected ?string $group = null;
-
-    /** @var ?string дополнительные данные для лога */
-    protected ?string $comment = null;
+    /** @var array $tests Тестовые данные */
+    public array $tests = [
+        self::KEY_RESPONSE  => null,
+        self::KEY_HTTP_CODE => null,
+    ];
 
     /** @var ?callback Функция вызываемая после запроса */
     protected $callBack = null;
 
 
 
-    // Т Е С Т О В О Е
-    /** @var string|null Тестовый ответ */
-    public ?string $testResponse = null;
-
-    /** @var int|null Тестовый код ответа */
-    public ?int $testHttpCode = null;
-
-
+    // Magic
 
     /**
      * Construct
      *
      * @param string $url куда слать запрос
      * @param ?array $data параметры/данные запроса
-     * @param ?string $logger ORM/ActiveRecord ЛОггер запросов
-     * @param ?bool $logger_status Статус активности логгера по умолчанию
      */
-    public function __construct(string $url, ?array $data = null, ?string $logger = null, ?bool $logger_status = false )
+    public function __construct( string $url, ?array $data = null )
     {
         $this->query = new Query();
 
@@ -79,13 +65,12 @@ abstract class Method
         $this->query->postFields = $data ?? [];
         $this->query->method = static::SELF_METHOD;
 
-        $this->logger = $logger;
-        $this->logger_status = $logger_status;
-
         return $this;
     }
 
 
+
+    // Methods
 
     /**
      * Получить значение `url`
@@ -120,52 +105,6 @@ abstract class Method
         return $this;
     }
 
-
-    /**
-     * @param string $group
-     * @return static
-     */
-    public function setGroup( string $group): self
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * Получить значение доп. данных запроса
-     *      используемого при логировании
-     *
-     * @return ?string
-     */
-    public function getGroup(): ?string
-    {
-        return $this->group;
-    }
-
-
-    /**
-     * @param string $comment
-     * @return static
-     */
-    public function setComment( string $comment ): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     *  Получить значение доп. данных запроса
-     *      используемого при логировании
-     *
-     * @return ?string
-     */
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
     /**
      * Получить значение `метода`
      *
@@ -196,14 +135,12 @@ abstract class Method
      * @param array $headers
      * @return static
      */
-    public function addHeaders(array $headers = [] ): self
+    public function addHeaders( array $headers = [] ): self
     {
         $this->query->headers = array_merge( $this->query->headers, $headers );
 
         return $this;
     }
-
-
 
     /**
      * Получить данные для cURL опций
@@ -235,12 +172,9 @@ abstract class Method
      * @param array $options
      * @return static
      */
-    public function addCurlOptions(array $options = [] ): self
+    public function addCurlOptions( array $options = [] ): self
     {
-        foreach ( $options as $option => $value )
-        {
-            $this->query->curlOptions[ $option ] = $value;
-        }
+        foreach ( $options as $option => $value ) $this->query->curlOptions[ $option ] = $value;
 
         return $this;
     }
@@ -304,21 +238,22 @@ abstract class Method
         return $this;
     }
 
-
     /**
      * Установить ответ для теста.
      *
      *  Запроса не будет вернётся этот ответ
      *
      * @param string $response
-     * @param int $code
+     * @param int $httpCode
      *
      * @return static
      */
-    public function setTestResponse( string $response, int $code = 200 ): self
+    public function setTestResponse( string $response, int $httpCode = 200 ): self
     {
-        $this->testResponse = $response;
-        $this->testHttpCode = $code;
+        $this->tests = [
+            self::KEY_RESPONSE  => $response,
+            self::KEY_HTTP_CODE => $httpCode,
+        ];
 
         return $this;
     }
@@ -356,52 +291,42 @@ abstract class Method
     /**
      * Отправка запроса
      *
-     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return Response
      */
-    public function run( ?bool $is_use_logger = null ): Response
+    public function run(): Response
     {
-        return ( new Request( $this, $this->logger ) )->run( $is_use_logger ?? $this->logger_status );
+        return ( new Request( $this ) )->run();
     }
 
     /**
      * Получение ответа на запрос
      *
-     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?string
      */
-    public function response( ?bool $is_use_logger = null ): ?string
+    public function response(): ?string
     {
-        return $this->run( $is_use_logger )->response;
+        return $this->run()->response;
     }
 
     /**
      * Получение ответа на запрос в формате `Object`
      *
-     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?object
      */
-    public function asObject( ?bool $is_use_logger = null ): ?object
+    public function asObject(): ?object
     {
-        return $this->run( $is_use_logger )->asObject();
+        return $this->run()->asObject();
     }
 
     /**
      * Получение ответа на запрос в формате `Array`
      *
-     * @param ?bool $is_use_logger TRUE = писать логи / FALSE = не писать логи
      * @return ?array
      */
-    public function asArray( ?bool $is_use_logger = null ): ?array
+    public function asArray(): ?array
     {
-        return $this->run( $is_use_logger )->asObject( true );
+        return $this->run()->asObject( true );
     }
-
-
-
-
-
-
 
     /**
      * Метод возвращает данные запроса
@@ -413,8 +338,6 @@ abstract class Method
         return $this->query;
     }
 
-
-
     /**
      * Проверка являетя ли запрос тестовым
      *
@@ -422,16 +345,26 @@ abstract class Method
      */
     public function isTest(): bool
     {
-        return ( !empty($this->testResponse) || !empty($this->testHttpCode) );
+        foreach ( $this->tests as $value )
+        {
+            if ( $value ) return true;
+        }
+
+        return false;
     }
 
     /**
      * Реализация callback (вызов)
      *
-     * @param Query $query
+     * @param Query $query Query object
+     * @param resource $ch Curl link
      */
-    public function initCallBack( Query $query )
+    public function initCallBack( Query $query, $ch )
     {
-        if ( $this->callBack ) call_user_func( $this->callBack, $query );
+        if ( $this->callBack )
+        {
+            call_user_func( $this->callBack, $query, $ch );
+        }
     }
+
 }

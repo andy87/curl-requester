@@ -12,7 +12,7 @@ namespace andy87\curl_requester\entity;
  * @property array $headers
  * @property array $curlOptions
  * @property ?string $response
- * @property ?int $http_code
+ * @property ?int $httpCode
  * @property array $info
  *
  * @method isGet()
@@ -26,6 +26,14 @@ namespace andy87\curl_requester\entity;
  */
 class Query
 {
+    // Constants
+
+    const OK = 200;
+
+
+
+    // Property
+
     /** @var string Метод запроса */
     public string $method;
 
@@ -45,13 +53,16 @@ class Query
     public ?string $response = null;
 
     /** @var ?int код ответа сервера */
-    public ?int $http_code = null;
+    public ?int $httpCode = null;
 
     /** @var array Список информации о запросе из curl_getinfo */
     public array $info = [
         CURLINFO_HTTP_CODE
     ];
 
+
+
+    // Magic
 
     /**
      * Magic
@@ -71,6 +82,9 @@ class Query
     }
 
 
+
+    // Methods
+
     /**
      * Определение метода
      *
@@ -81,4 +95,5 @@ class Query
     {
         return $this->method === $method;
     }
+
 }

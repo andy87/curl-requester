@@ -1,6 +1,9 @@
 <?php
 
-/** @var andy87\curl_requester\Curl $curl */
+/** @var Curl $curl */
+
+use andy87\curl_requester\Curl;
+use andy87\curl_requester\entity\Query;
 
 //GET зпрос
 $response = $curl->get( 'vk.com/id806034' )->response(); // string
@@ -16,4 +19,17 @@ $resp = $curl->patch( 'vk.com/user/get', ['id' => 806034])
 
 //Получение данных
 $response   = $resp->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$http_code  = $resp->http_code;
+$httpCode  = $resp->httpCode;
+
+// CallBack
+$request = $curl->post('url' );
+$request->setCallback(function ( Query $query, $curlHandler){
+
+    if ( $query->httpCode !== Query::OK )
+    {
+        $errors = curl_error( $curlHandler );
+
+        print_r($errors);
+    }
+});
+$response = $request->run()->response;

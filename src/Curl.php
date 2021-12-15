@@ -11,23 +11,17 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  *  Строитель/Декоратор над вызовами cURL функций
  *  Единая точка входа для осуществления запросов
  *
- * @method Get get( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
- * @method Post post( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
- * @method Put put( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
- * @method Patch patch( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
- * @method Head head( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
- * @method Delete delete( string $url, ?array $params = null, ?string $logger = null, ?bool $logger_status = null )
+ * @method Get get( string $url, ?array $params = null )
+ * @method Post post( string $url, ?array $params = null )
+ * @method Put put( string $url, ?array $params = null )
+ * @method Patch patch( string $url, ?array $params = null )
+ * @method Head head( string $url, ?array $params = null )
+ * @method Delete delete( string $url, ?array $params = null )
  *
  * @package andy87\curl_requester
  */
 class Curl
 {
-    /** @var ?string ORM/ActiveRecord логгер запросов */
-    const LOGGER = null;
-
-    /** @var bool Статус активности логгера по умолчанию  */
-    const DEFAULT_LOGGER_STATUS = false;
-
     /** @var string[] список поддерживаемых методов */
     const METHOD_LIST = [
         Method::GET     => Get::class,
@@ -38,8 +32,6 @@ class Curl
         Method::DELETE  => Delete::class,
     ];
 
-
-
     /**
      * Magic
      *
@@ -49,21 +41,18 @@ class Curl
      */
     public function __call( string $name, array $arg = [] )
     {
-        $method = strtoupper($name);
+        $method = strtoupper( $name );
 
         if ( $method = ( static::METHOD_LIST[$method] ?? false ) )
         {
-            $url  = $arg[0];
             $data = $arg[1] ?? [];
-            $url  = $this->constructUri( $url, ( ( $method === Get::class ) ? $data : [] ) );
+            $url  = $this->constructUri( $arg[0], ( ( $method === Get::class ) ? $data : [] ) );
 
-            return new $method( $url, $data, static::LOGGER, static::DEFAULT_LOGGER_STATUS );
+            return new $method( $url, $data, );
         }
 
         return null;
     }
-
-
 
     /**
      * Конструктор `uri` с возможностью добавить в строку GET параметры
@@ -76,7 +65,7 @@ class Curl
     {
         $resp = mb_strtolower( $url );
 
-        if ( strpos( $resp, '://') === false ) $resp = 'https://' . $resp;
+        if ( strpos( $resp, '://') === false ) $resp = ( $_SERVER['REQUEST_SCHEME'] ?? 'https' ) . '://' . $resp;
 
         if ( !empty($params) ) {
             $symbol = ( strpos($resp, '?' ) === false ) ? '?' : '&';
