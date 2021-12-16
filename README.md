@@ -1,6 +1,6 @@
 Многофункциональный класс для отправки запросов с помощью функций cURL.
 
-***Решаемые задачи:*** 
+***Решаемые задачи/цели:*** 
 <br> 1. Единая точка входа для отправки запросов
 <br> 2. Легко использовать (простой интерфейс и настройка)
 <hr>
@@ -25,7 +25,7 @@ $response   = $request->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
 $http_code  = $request->http_code;
 ```
 
-
+<hr>
 
 # Детальнее.
 
@@ -115,6 +115,8 @@ $http_code  = $query->httpCode;
 $isPost     = $query->isPost();
 //... и т.д. ( isGet(), isPut() ... )
 ```
+
+<hr>
 
 ## Дополнительные возможности
 ### Вернуть тестовые данные
@@ -242,6 +244,8 @@ $response = $request->run()->response;
     ...
 ```
 
+<hr>
+
 ### Собственная реализация [cURL](https://www.php.net/manual/ru/book.curl.php) через Request 
 ```php
 use andy87\curl_requester\entity\Request
@@ -265,6 +269,8 @@ $response = Request::createCurlHandler( 'www.vk.com/806034', [
     CURLOPT_POSTFIELDS      => [ 'some params' ]
 ], ( $is_return_response = true ) );
 ```
+
+<hr>
 
 # Установка
 
