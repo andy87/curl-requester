@@ -8,8 +8,8 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
 /**
  * Class `Curl`
  *
- *  Строитель/Декоратор над вызовами cURL функций
  *  Единая точка входа для осуществления запросов
+ *  Строитель/Декоратор над cURL функциями
  *
  * @method Get get( string $url, ?array $params = null )
  * @method Post post( string $url, ?array $params = null )
@@ -22,6 +22,11 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  */
 class Curl
 {
+    // Constants
+
+    /** @var string just const */
+    const HTTPS = 'https';
+
     /** @var string[] список поддерживаемых методов */
     const METHOD_LIST = [
         Method::GET     => Get::class,
@@ -32,8 +37,12 @@ class Curl
         Method::DELETE  => Delete::class,
     ];
 
+
+
+    // Magic
+
     /**
-     * Magic
+     * Обработчик вызова несуществующих методов
      *
      * @param string $name
      * @param array $arg
@@ -54,6 +63,10 @@ class Curl
         return null;
     }
 
+
+
+    // Methods
+
     /**
      * Конструктор `uri` с возможностью добавить в строку GET параметры
      *
@@ -65,7 +78,7 @@ class Curl
     {
         $resp = mb_strtolower( $url );
 
-        if ( strpos( $resp, '://') === false ) $resp = ( $_SERVER['REQUEST_SCHEME'] ?? 'https' ) . '://' . $resp;
+        if ( strpos( $resp, '://') === false ) $resp = ( $_SERVER['REQUEST_SCHEME'] ?? self::HTTPS ) . '://' . $resp;
 
         if ( !empty($params) ) {
             $symbol = ( strpos($resp, '?' ) === false ) ? '?' : '&';

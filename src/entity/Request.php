@@ -2,6 +2,8 @@
 
 namespace andy87\curl_requester\entity;
 
+use andy87\curl_requester\Curl;
+use Exception;
 use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
 
 /**
@@ -16,6 +18,13 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  */
 class Request
 {
+    // Constants
+
+    /** @var string события */
+    const EVENT_RUN             = 'run';
+    const EVENT_BEFORE_REQUEST  = 'before_request';
+    const EVENT_AFTER_REQUEST   = 'after_request';
+
     // Property
 
     /** @var object|Method|Get|Post|Put|Patch|Head|Delete $query объект запроса */
@@ -26,7 +35,7 @@ class Request
     // Magic
 
     /**
-     * Construct
+     * Конструктор объекта
      *
      * @param object|Method|Get|Post|Put|Patch|Head|Delete $query
      */
@@ -69,10 +78,13 @@ class Request
      * Выполнение запроса через class
      *
      * @return Response
+     * @throws Exception
      */
     public function run(): Response
     {
         $query = $this->query->getQuery();
+
+        $query->behavior( self::EVENT_RUN, $query, null );
 
         $curlOptions[ CURLOPT_RETURNTRANSFER ] = true;
 
@@ -102,6 +114,8 @@ class Request
 
             $ch = self::createCurlHandler( $query->url, $query->curlOptions );
 
+            $query->behavior( self::EVENT_BEFORE_REQUEST, $query, $ch );
+
             $query->response  = curl_exec( $ch );
 
             $info = [];
@@ -112,9 +126,9 @@ class Request
 
             $query->httpCode = $query->info[ CURLINFO_HTTP_CODE ];
 
-            $this->query->initCallBack( $query, $ch );
+            $query->behavior( self::EVENT_AFTER_REQUEST, $query, $ch );
 
-            curl_close($ch);
+            curl_close( $ch );
         }
 
         return new Response( $query );

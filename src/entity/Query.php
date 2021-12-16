@@ -2,19 +2,22 @@
 
 namespace andy87\curl_requester\entity;
 
+use Exception;
+
 /**
  *  Class Property
  *
  *      Данные запроса
  *
- * @property string $method
- * @property string $url
- * @property array|string $postFields
- * @property array $headers
- * @property array $curlOptions
- * @property ?string $response
- * @property ?int $httpCode
- * @property array $info
+ * @property string $method Метод запроса
+ * @property string $url URL адрес на который отправляется запрос
+ * @property array|string $postFields данные запроса
+ * @property array $headers заголовки запроса
+ * @property array $curlOptions cURL опции запроса
+ * @property ?string $response ответ сервера
+ * @property ?int $httpCode код ответа сервера
+ * @property array $info Список информации о запросе из `curl_getinfo()`
+ * @property callable[] $behavior функции вызываемые при событиях
  *
  * @method isGet()
  * @method isPost()
@@ -47,7 +50,7 @@ class Query
     /** @var array заголовки запроса */
     public array $headers = [];
 
-    /** @var array CURL OPTIONS запроса */
+    /** @var array cURL опции запроса */
     public array $curlOptions = [];
 
     /** @var string|null ответ сервера */
@@ -61,15 +64,23 @@ class Query
         CURLINFO_HTTP_CODE
     ];
 
+    /**
+     * @var callable[] функции вызываемые при событиях:
+     *  - callback
+     *  - before_request
+     *  - after_request
+     */
+    protected array $behavior = [];
+
 
 
     // Magic
 
     /**
-     * Magic
+     * Обработчик вызова несуществующих методов
      *
-     * @param string $name
-     * @param mixed $arguments
+     * @param string $name имя вызываемого метода
+     * @param mixed $arguments аргументы
      * @return bool|void
      */
     public function __call( string $name, $arguments )
@@ -87,7 +98,7 @@ class Query
     // Methods
 
     /**
-     * Определение метода
+     * Определение метода запроса
      *
      * @param string $method
      * @return bool
@@ -97,4 +108,23 @@ class Query
         return $this->method === $method;
     }
 
+    /**
+     * Обработка событий
+     *
+     * @param Query $query Query object
+     * @param resource $ch Curl link
+     * @throws Exception
+     */
+    public function behavior( string $event, Query $query, $ch )
+    {
+        if ( !isset($this->behavior[ $event ]) )
+        {
+            if ( !is_callable($this->behavior[ $event ]) )
+            {
+                throw new Exception('behavior event not callable func');
+            }
+
+            call_user_func( $this->behavior[ $event ], $query, $ch );
+        }
+    }
 }

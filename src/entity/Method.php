@@ -2,8 +2,10 @@
 
 namespace andy87\curl_requester\entity;
 
+use andy87\curl_requester\Curl;
+
 /**
- *  Class `Method`
+ *  Abstract class `Method`
  *
  *  Общий/родительский класс с базовым функционалом
  *
@@ -25,10 +27,11 @@ abstract class Method
     const DELETE        = 'DELETE';
     const PATCH         = 'PATCH';
 
+    /** Ключи */
     const KEY_RESPONSE  = 'response';
     const KEY_HTTP_CODE = 'httpCode';
 
-    /** @var string Установка метода запроса */
+    /** @var string Метод запроса */
     const SELF_METHOD   = self::GET;
 
 
@@ -44,15 +47,12 @@ abstract class Method
         self::KEY_HTTP_CODE => null,
     ];
 
-    /** @var ?callback Функция вызываемая после запроса */
-    protected $callBack = null;
-
 
 
     // Magic
 
     /**
-     * Construct
+     * Конструктор объекта
      *
      * @param string $url куда слать запрос
      * @param null|array|string $data параметры/данные запроса
@@ -266,10 +266,26 @@ abstract class Method
      */
     public function setCallback( callable $callback ): self
     {
-        $this->callBack = $callback;
+        $this->setEvent( Request::EVENT_AFTER_REQUEST, $callback );
 
         return $this;
     }
+
+    /**
+     * Установить функцию для `events`
+     *
+     * @param string $event ключ события
+     * @param callable $callback вызываемая функция
+     * @return static
+     */
+    public function setEvent( string $event, callable $callback ): self
+    {
+        $this->query->behavior[ $event ] = $callback;
+
+        return $this;
+    }
+
+
 
     /**
      * Дополняет список информации по запросу которую надо получить
@@ -346,20 +362,6 @@ abstract class Method
     public function isTest(): bool
     {
         return ( $this->tests[ self::KEY_RESPONSE ] || $this->tests[ self::KEY_HTTP_CODE ] );
-    }
-
-    /**
-     * Реализация callback (вызов)
-     *
-     * @param Query $query Query object
-     * @param resource $ch Curl link
-     */
-    public function initCallBack( Query $query, $ch )
-    {
-        if ( $this->callBack )
-        {
-            call_user_func( $this->callBack, $query, $ch );
-        }
     }
 
 }

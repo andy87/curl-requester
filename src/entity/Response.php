@@ -27,7 +27,7 @@ class Response
     // Magic
 
     /**
-     * Construct
+     * Конструктор объекта
      *
      * @param Query $query
      */

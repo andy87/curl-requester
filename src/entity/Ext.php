@@ -3,9 +3,9 @@
 namespace andy87\curl_requester\entity;
 
 /**
- * Class `Ext`
+ * Abstract class `Ext`
  *
- *  Расширеный функционал
+ *  Расширеный функционал для class @property Method
  *
  * @property bool $params_is_ready если данные уже готовы и их не надо `http_build_query` ставится `TRUE`
  *
@@ -15,7 +15,7 @@ abstract class Ext extends Method
 {
     // Property
 
-    /** @var bool если данные уже готовы и их не надо `http_build_query` ставится `TRUE` */
+    /** @var bool при готовы данных без необходимости `http_build_query()` значение == `TRUE` */
     public bool $params_is_ready = false;
 
 
@@ -23,10 +23,10 @@ abstract class Ext extends Method
     // Magic
 
     /**
-     * Construct
+     * Конструктор объекта
      *
-     * @param string $url
-     * @param ?array $data
+     * @param string $url куда отправляется запрос
+     * @param ?array $data параметры запроса
      */
     public function __construct( string $url, ?array $data = null )
     {
@@ -44,7 +44,8 @@ abstract class Ext extends Method
     /**
      * Использовать подготовленные данные для запроса, не нуждающиеся в `http_build_query()`
      *
-     * @param null|array|string $params
+     * @param null|array|string $params параметры для запроса
+     *
      * @return $this
      */
     public function prepareParams( $params = null ): self

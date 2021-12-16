@@ -230,8 +230,32 @@ $query = $curl->post('www.vk.com/806034')
 
 $last_url = $query->info[ CURLINFO_EFFECTIVE_URL ]; //Получение информации 
 ```
+### Установка event функций
+- **setEvent( *string* $event, *callable* $function )** - callback функция, которая будет вызвана в event
+  - *string* ***$event*** - ключ события. Доступны:  
+    - **Request**::***EVENT_RUN*** - до запроса и до инициализации resource cURL
+    - **Request**::***EVENT_BEFORE_REQUEST*** - до запроса, после инициализации resource cURL
+    - **Request**::***EVENT_AFTER_REQUEST*** - после запроса, после инициализации resource cURL
+  - *callable* ***$function*** - вызываемая функция
+```php
+use andy87\curl_requester\entity\Query
+
+/** @var andy87\curl_requester\Curl $curl */
+
+$request = $curl->post('www.vk.com/806034');
+//пример: задать некий callBack после запроса
+$request->setEvent(
+    Request::EVENT_AFTER_REQUEST, 
+    function ( Query $query, $curlHandler )
+    {
+      // some code
+    }
+);
+
+$resp = $request->run()->response;
+```
 ### Установка callBack функции
-- **setCallback( *callable* $callback )** - callback функция, которая будет вызвана сразу после формирования ответа от сервера и до закрытия [curlHandler](https://www.php.net/manual/ru/book.curl.php)
+- **setCallback( *callable* $callback )** - функция( **Request**::***EVENT_AFTER_REQUEST*** ), которая будет вызвана сразу после формирования ответа от сервера и до закрытия [curlHandler](https://www.php.net/manual/ru/book.curl.php)
 ```php
 use andy87\curl_requester\entity\Query
 
@@ -252,7 +276,6 @@ $request->setCallback(function ( Query $query, $curlHandler )
 });
 
 $resp = $request->run()->response;
-    ...
 ```
 
 <hr>
