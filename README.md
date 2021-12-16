@@ -14,7 +14,7 @@
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-//GET зпрос
+//GET запрос
 $resp = $curl->get( 'vk.com/id806034' )->response(); // string
 
 // Получение ответа в качестве объекта с запросом методом POST
@@ -34,9 +34,9 @@ $http_code  = $response->httpCode;
 
 ### Mapping
 Переменные в примерах кода:
- - ***$response*** - объект класа `andy87\curl_requester\entity\Response`
- - ***$request*** - объект класа `andy87\curl_requester\entity\Request`
- - ***$query*** - объект класа `andy87\curl_requester\entity\Query`
+ - ***$response*** - объект класса `andy87\curl_requester\entity\Response`
+ - ***$request*** - объект класса `andy87\curl_requester\entity\Request`
+ - ***$query*** - объект класса `andy87\curl_requester\entity\Query`
 
 ### Детальнее
 Доступно 6 методов/запросов: GET, POST, PUT, PATCH, HEAD, DELETE  
@@ -77,7 +77,7 @@ $resp = $curl->get('www.andy87.ru')->response(); // string
 
 //Аналог
 
-$response = $curl->get('www.andy87.ru')->run(); // Вернёт объект класса `Response` (информацию о ответе)
+$response = $curl->get('www.andy87.ru')->run(); // Вернёт объект класса `Response` (информацию об ответе)
 $resp     = $response->response;
 
 //Аналог(краткая запись)
@@ -130,6 +130,7 @@ $isPost     = $query->isPost();
 <hr>
 
 ## Дополнительные возможности
+
 ### Вернуть тестовые данные
 - **setTestResponse( *string* $response, *int* $http_code )** - запрос не выполнится и вернётся заданный ответ.  
   - *string* **$response** - имитируемый ответ
@@ -230,7 +231,7 @@ $query = $curl->post('www.vk.com/806034')
 $last_url = $query->info[ CURLINFO_EFFECTIVE_URL ]; //Получение информации 
 ```
 ### Установка callBack функции
-- **setCallback( *callable* $callback )** - callback функция которая будет вызвана сразу после формирования ответа от сервера и до закрытия [curlHandler](https://www.php.net/manual/ru/book.curl.php)
+- **setCallback( *callable* $callback )** - callback функция, которая будет вызвана сразу после формирования ответа от сервера и до закрытия [curlHandler](https://www.php.net/manual/ru/book.curl.php)
 ```php
 use andy87\curl_requester\entity\Query
 
