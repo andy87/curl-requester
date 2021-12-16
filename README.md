@@ -1,3 +1,8 @@
+<p align="center">
+    <img src="https://raw.githubusercontent.com/andy87/curl-requester/main/logo.png">
+    <h1 align="center">curl-requester</h1>
+</p>
+
 Многофункциональный класс для отправки запросов с помощью функций cURL.
 
 ***Решаемые задачи/цели:*** 
