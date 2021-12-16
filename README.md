@@ -32,13 +32,13 @@ $http_code  = $response->httpCode;
 
 <hr>
 
-###Mapping
+### Mapping
 Переменные в примерах кода:
  - ***$response*** - объект класа `andy87\curl_requester\entity\Response`
  - ***$request*** - объект класа `andy87\curl_requester\entity\Request`
  - ***$query*** - объект класа `andy87\curl_requester\entity\Query`
 
-###Детальнее
+### Детальнее
 Доступно 6 методов/запросов: GET, POST, PUT, PATCH, HEAD, DELETE  
 Все методы вызываются идентично.  
 1. **конструктор** - принимает аргументы:
