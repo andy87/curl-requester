@@ -2,7 +2,6 @@
 
 namespace andy87\curl_requester\entity;
 
-use andy87\curl_requester\Curl;
 use Exception;
 use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
 
@@ -54,7 +53,8 @@ class Request
      * @param string $url URL куда делается запрос
      * @param array $options опции для cURL
      * @param bool $is_return_response сразу вернуть ответ, вместо resource cUrl
-     * @return resource|string|bool
+     *
+     * @return bool|resource|string
      */
     public static function createCurlHandler( string $url, array $options = [], bool $is_return_response = false )
     {
@@ -62,22 +62,23 @@ class Request
 
         curl_setopt_array( $ch, $options );
 
-        $resp = $ch;
-
         if ( $is_return_response )
         {
             $resp = curl_exec( $ch );
 
             curl_close( $ch );
+
+            return $resp;
         }
 
-        return $resp;
+        return $ch;
     }
 
     /**
      * Выполнение запроса через class
      *
      * @return Response
+     *
      * @throws Exception
      */
     public function run(): Response
@@ -86,7 +87,7 @@ class Request
 
         $query->behavior( self::EVENT_RUN, $query, null );
 
-        $curlOptions[ CURLOPT_RETURNTRANSFER ] = true;
+        $curlOptions[ CURLOPT_RETURNTRANSFER ] = 1;
 
         if ( $this->isExtend( $query ) )
         {
@@ -118,11 +119,10 @@ class Request
 
             $query->response  = curl_exec( $ch );
 
-            $info = [];
-
-            foreach ( $query->info as $code ) $info[ $code ] = curl_getinfo( $ch, $code );
-
-            $query->info = $info;
+            foreach ( $query->info as $code )
+            {
+                $query->info[ $code ] = curl_getinfo( $ch, $code );
+            }
 
             $query->httpCode = $query->info[ CURLINFO_HTTP_CODE ];
 
@@ -138,6 +138,7 @@ class Request
      * Определение необходимости дополнительных опций запроса
      *
      * @param Query $query
+     *
      * @return bool
      */
     private function isExtend( Query $query ): bool

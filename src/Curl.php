@@ -11,12 +11,12 @@ use andy87\curl_requester\entity\methods\{Get,Post,Put,Patch,Head,Delete};
  *  Единая точка входа для осуществления запросов
  *  Строитель/Декоратор над cURL функциями
  *
- * @method Get get( string $url, ?array $params = null )
- * @method Post post( string $url, ?array $params = null )
- * @method Put put( string $url, ?array $params = null )
- * @method Patch patch( string $url, ?array $params = null )
- * @method Head head( string $url, ?array $params = null )
- * @method Delete delete( string $url, ?array $params = null )
+ * @method Get get( string $url, $params = null )
+ * @method Post post( string $url, $params = null )
+ * @method Put put( string $url, $params = null )
+ * @method Patch patch( string $url, $params = null )
+ * @method Head head( string $url, $params = null )
+ * @method Delete delete( string $url, $params = null )
  *
  * @package andy87\curl_requester
  */

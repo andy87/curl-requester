@@ -5,32 +5,66 @@
 use andy87\curl_requester\Curl;
 use andy87\curl_requester\entity\Query;
 
-//GET зпрос
-$resp = $curl->get( 'vk.com/id806034' )->response(); // string
+try {
 
-// Получение ответа в качестве объекта с запросом методом POST
-$object = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])->run()->asObject(); // object
+    //GET зпрос
+    $respString = $curl->get( 'vk.com/id806034' )->response(); // string
+    $respArray  = $curl->get( 'vk.com/id806034' )->asArray(); // Array
+    $respObject = $curl->get( 'vk.com/id806034' )->asObject(); // Object
 
+    // Получение ответа в качестве объекта с запросом методом POST
+    $object = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])->run()->asObject(); // object
 
-// Имитация запроса методом PATCH с получением тестовых данных
-$response = $curl->patch( 'vk.com/user/get', ['id' => 806034])
-    ->setTestResponse('{"name" : "Андрей", "do" : "code"}')
-    ->run();
+    // Имитация запроса методом PATCH с получением тестовых данных
+    $response = $curl->patch( 'vk.com/user/get', ['id' => 806034])
+        ->setTestResponse('{"name" : "Андрей", "do" : "code"}')
+        ->run();
 
-//Получение данных
-$res      = $response->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$httpCode = $response->httpCode;
+    //Получение данных
+    $res      = $response->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
+    $httpCode = $response->httpCode;
 
-// CallBack
-$request = $curl->post('url' );
-$request->setCallback(function ( Query $query, $curlHandler){
+    // CallBack
+    $request = $curl->post('url' );
+    $request->setCallback(function ( Query $query, $curlHandler){
 
-    if ( $query->httpCode !== Query::OK )
-    {
-        $errors = curl_error( $curlHandler );
+        if ( $query->httpCode !== Query::OK )
+        {
+            $errors = curl_error( $curlHandler );
 
-        print_r($errors);
-        die;
-    }
-});
-$resp = $request->run()->response;
+            print_r($errors);
+            die;
+        }
+    });
+    $resp = $request->run()->response;
+
+    // Имитация запроса методом post с получением тестовых данных
+    $request = $curl->post( 'vk.com/user/get', [])
+        ->prepareParams()
+        ->disableSSL()
+        ->enableRedirect()
+        ->setPostFields([])
+        ->addContentType('json')
+        ->setBasicAuth('12345')
+        ->useCookie('cookiename=cookievalue', '/tmp/cookies.txt')
+        ->addCurlInfo([])
+        ->setCallback( function ( $query, $ch ){
+        });
+
+    $a = $request->getQuery();
+    $b = $request->getUrl();
+    $c = $request->getMethod();
+    $d = $request->getHeaders();
+    $e = $request->getCurlOptions();
+    $f = $request->getPostFields();
+
+    $response = $request->run();
+
+    $query = $response->getQuery();
+
+    $resp = $response->response;
+
+} catch ( Exception $e ) {
+
+    exit( $e->getMessage() );
+}

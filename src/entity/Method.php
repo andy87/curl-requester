@@ -3,6 +3,7 @@
 namespace andy87\curl_requester\entity;
 
 use andy87\curl_requester\Curl;
+use Exception;
 
 /**
  *  Abstract class `Method`
@@ -56,6 +57,8 @@ abstract class Method
      *
      * @param string $url куда слать запрос
      * @param null|array|string $data параметры/данные запроса
+     *
+     * @return static
      */
     public function __construct( string $url, $data = null )
     {
@@ -96,7 +99,8 @@ abstract class Method
      * Задать данные запроса
      *
      * @param array|string $data
-     * @return $this
+     *
+     * @return static
      */
     public function setPostFields( $data ): self
     {
@@ -133,6 +137,7 @@ abstract class Method
      * Установить данные для `headers`
      *
      * @param array $headers
+     *
      * @return static
      */
     public function addHeaders( array $headers = [] ): self
@@ -157,6 +162,7 @@ abstract class Method
      *      'Authorization: Basic ...'
      *
      * @param string $token
+     *
      * @return static
      */
     public function setBasicAuth( string $token ): self
@@ -170,6 +176,7 @@ abstract class Method
      * Установить данные для cURL опций
      *
      * @param array $options
+     *
      * @return static
      */
     public function addCurlOptions( array $options = [] ): self
@@ -184,6 +191,7 @@ abstract class Method
      *
      * @param string $cookie
      * @param string $path
+     *
      * @return static
      */
     public function useCookie( string $cookie, string $path ): self
@@ -262,6 +270,7 @@ abstract class Method
      * Установить функцию вызываемую после запроса
      *
      * @param callable $callback
+     *
      * @return static
      */
     public function setCallback( callable $callback ): self
@@ -276,11 +285,12 @@ abstract class Method
      *
      * @param string $event ключ события
      * @param callable $callback вызываемая функция
+     *
      * @return static
      */
     public function setEvent( string $event, callable $callback ): self
     {
-        $this->query->behavior[ $event ] = $callback;
+        $this->query->setEvent( $event, $callback );
 
         return $this;
     }
@@ -291,6 +301,7 @@ abstract class Method
      * Дополняет список информации по запросу которую надо получить
      *
      * @param array $curl_info
+     *
      * @return static
      */
     public function addCurlInfo( array $curl_info ): self
@@ -308,6 +319,7 @@ abstract class Method
      * Отправка запроса
      *
      * @return Response
+     * @throws Exception
      */
     public function run(): Response
     {
@@ -318,6 +330,7 @@ abstract class Method
      * Получение ответа на запрос
      *
      * @return ?string
+     * @throws Exception
      */
     public function response(): ?string
     {
@@ -328,6 +341,7 @@ abstract class Method
      * Получение ответа на запрос в формате `Object`
      *
      * @return ?object
+     * @throws Exception
      */
     public function asObject(): ?object
     {
@@ -338,6 +352,7 @@ abstract class Method
      * Получение ответа на запрос в формате `Array`
      *
      * @return ?array
+     * @throws Exception
      */
     public function asArray(): ?array
     {

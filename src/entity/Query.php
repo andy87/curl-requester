@@ -109,6 +109,17 @@ class Query
     }
 
     /**
+     * Установить функцию для `events`
+     *
+     * @param string $event ключ события
+     * @param callable $callback вызываемая функция
+     */
+    public function setEvent( string $event, callable $callback )
+    {
+        $this->behavior[ $event ] = $callback;
+    }
+
+    /**
      * Обработка событий
      *
      * @param Query $query Query object
@@ -117,7 +128,7 @@ class Query
      */
     public function behavior( string $event, Query $query, $ch )
     {
-        if ( !isset($this->behavior[ $event ]) )
+        if ( isset($this->behavior[ $event ]) )
         {
             if ( !is_callable($this->behavior[ $event ]) )
             {

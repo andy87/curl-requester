@@ -321,7 +321,7 @@ $resp = Request::createCurlHandler( 'www.vk.com/806034', [
 ```
 "require": {
     ...
-    "andy87/curl-requester" : "1.0.4"
+    "andy87/curl-requester" : "1.1.5"
 },
 ```
 <small>repositories</small>
@@ -332,7 +332,7 @@ $resp = Request::createCurlHandler( 'www.vk.com/806034', [
         "type"                  : "package",
         "package"               : {
             "name"                  : "andy87/curl-requester",
-            "version"               : "1.0.4",
+            "version"               : "1.1.5",
             "source"                : {
                 "type"                  : "git",
                 "reference"             : "main",

@@ -3,6 +3,7 @@
 namespace andy87\curl_requester\entity\methods;
 
 use andy87\curl_requester\entity\Method;
+use Exception;
 
 /**
  *  Class `Get`
@@ -17,6 +18,8 @@ class Get extends Method
      * Получение ответа на запрос
      *
      * @return ?string
+     *
+     * @throws Exception
      */
     public function response(): ?string
     {
