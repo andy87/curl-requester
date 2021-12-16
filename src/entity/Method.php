@@ -55,14 +55,14 @@ abstract class Method
      * Construct
      *
      * @param string $url куда слать запрос
-     * @param ?array $data параметры/данные запроса
+     * @param null|array|string $data параметры/данные запроса
      */
-    public function __construct( string $url, ?array $data = null )
+    public function __construct( string $url, $data = null )
     {
         $this->query = new Query();
 
         $this->query->url = $url;
-        $this->query->postFields = $data ?? [];
+        $this->query->postFields = $data ?? '';
         $this->query->method = static::SELF_METHOD;
 
         return $this;
@@ -345,12 +345,7 @@ abstract class Method
      */
     public function isTest(): bool
     {
-        foreach ( $this->tests as $value )
-        {
-            if ( $value ) return true;
-        }
-
-        return false;
+        return ( $this->tests[ self::KEY_RESPONSE ] || $this->tests[ self::KEY_HTTP_CODE ] );
     }
 
     /**

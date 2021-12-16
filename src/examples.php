@@ -30,6 +30,7 @@ $request->setCallback(function ( Query $query, $curlHandler){
         $errors = curl_error( $curlHandler );
 
         print_r($errors);
+        die;
     }
 });
 $response = $request->run()->response;

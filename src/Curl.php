@@ -37,7 +37,7 @@ class Curl
      *
      * @param string $name
      * @param array $arg
-     * @return null|Delete|Get|Head|Method|Patch|Post|Put
+     * @return null|Method|Get|Post|Patch|Put|Head|Delete
      */
     public function __call( string $name, array $arg = [] )
     {

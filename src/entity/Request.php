@@ -40,21 +40,33 @@ class Request
     // Methods
 
     /**
-     * @param string $url
-     * @param array $options
-     * @return resource
+     * Конструктор cURL ресурса. Возвращает cURL ресурс или response запроса
+     *
+     * @param string $url URL куда делается запрос
+     * @param array $options опции для cURL
+     * @param bool $is_return_response сразу вернуть ответ, вместо resource cUrl
+     * @return resource|string|bool
      */
-    public static function createCurlHandler( string $url, array $options = [] )
+    public static function createCurlHandler( string $url, array $options = [], bool $is_return_response = false )
     {
         $ch = curl_init( $url );
 
         curl_setopt_array( $ch, $options );
 
-        return $ch;
+        $resp = $ch;
+
+        if ( $is_return_response )
+        {
+            $resp = curl_exec( $ch );
+
+            curl_close( $ch );
+        }
+
+        return $resp;
     }
 
     /**
-     * Выполнение запроса
+     * Выполнение запроса через class
      *
      * @return Response
      */
@@ -73,12 +85,17 @@ class Request
 
         foreach ( $curlOptions as $option => $value )
         {
-            if ( !isset($query->curlOptions[ $option ]) ) $query->curlOptions[ $option ] = $value;
+            // фильтр для предотвращения перезаписи опций которые задаются по стандарту
+            if ( !isset($query->curlOptions[ $option ]) )
+            {
+                $query->curlOptions[ $option ] = $value;
+            }
         }
 
         if ( $this->query->isTest() )
         {
-            $query->response  = $this->query->tests[ Method::KEY_RESPONSE ];
+            // если запрос тестовый
+            $query->response = $this->query->tests[ Method::KEY_RESPONSE ];
             $query->httpCode = $this->query->tests[ Method::KEY_HTTP_CODE ];
 
         } else {

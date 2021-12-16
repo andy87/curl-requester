@@ -42,14 +42,15 @@ abstract class Ext extends Method
     // Methods
 
     /**
-     * Использовать подготовленные данные для запроса, не нуждающиеся в http_build_query()
+     * Использовать подготовленные данные для запроса, не нуждающиеся в `http_build_query()`
      *
-     * @param array $postField
+     * @param null|array|string $params
      * @return $this
      */
-    public function prepareParams( array $postField ): self
+    public function prepareParams( $params = null ): self
     {
-        $this->query->postFields = $postField;
+        if ( $params ) $this->query->postFields = $params;
+
         $this->params_is_ready = true;
 
         return $this;

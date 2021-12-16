@@ -7,8 +7,9 @@ namespace andy87\curl_requester\entity;
  *
  *      Данные запроса
  *
+ * @property string $method
  * @property string $url
- * @property array|string $params
+ * @property array|string $postFields
  * @property array $headers
  * @property array $curlOptions
  * @property ?string $response
@@ -41,7 +42,7 @@ class Query
     public string $url;
 
     /** @var array|string данные запроса */
-    public $postFields = [];
+    public $postFields = '';
 
     /** @var array заголовки запроса */
     public array $headers = [];
@@ -55,7 +56,7 @@ class Query
     /** @var ?int код ответа сервера */
     public ?int $httpCode = null;
 
-    /** @var array Список информации о запросе из curl_getinfo */
+    /** @var array Список информации о запросе из `curl_getinfo()` */
     public array $info = [
         CURLINFO_HTTP_CODE
     ];
