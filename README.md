@@ -15,25 +15,30 @@
 /** @var andy87\curl_requester\Curl $curl */
 
 //GET зпрос
-$response = $curl->get( 'vk.com/id806034' )->response(); // string
+$resp = $curl->get( 'vk.com/id806034' )->response(); // string
 
 // Получение ответа в качестве объекта с запросом методом POST
-$object = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])->run()->asObject(); // object
+$respObject = $curl->post( 'vk.com/user/add', [ 'name' => 'and_y87' ])->run()->asObject(); // object
 
 // Имитация запроса методом PATCH с получением тестовых данных
-$request = $curl->patch( 'vk.com/user/get', ['id' => 806034])
+$response = $curl->patch( 'vk.com/user/get', ['id' => 806034])
     ->setTestResponse('{"name" : "Андрей", "do" : "code"}')
     ->run();
 
 //Получение данных
-$response   = $request->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$http_code  = $request->http_code;
+$respArray  = $response->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
+$http_code  = $response->httpCode;
 ```
 
 <hr>
 
-# Детальнее.
+###Mapping
+Переменные в примерах кода:
+ - ***$response*** - объект класа `andy87\curl_requester\entity\Response`
+ - ***$request*** - объект класа `andy87\curl_requester\entity\Request`
+ - ***$query*** - объект класа `andy87\curl_requester\entity\Query`
 
+###Детальнее
 Доступно 6 методов/запросов: GET, POST, PUT, PATCH, HEAD, DELETE  
 Все методы вызываются идентично.  
 1. **конструктор** - принимает аргументы:
@@ -42,10 +47,11 @@ $http_code  = $request->http_code;
  
 ```php
 /** @var andy87\curl_requester\Curl $curl */
+/** @var andy87\curl_requester\entity\Response $curl */
 
-$curl->get('https://andy87.ru');
+$request = $curl->get('https://andy87.ru');
 
-$curl->post('www.andy87.ru/search', [ 'text' => 'php' ])
+$request = $curl->post('www.andy87.ru/search', [ 'text' => 'php' ]);
 ```
 
 2. Ответ(***response***).  
@@ -54,25 +60,25 @@ $curl->post('www.andy87.ru/search', [ 'text' => 'php' ])
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$object = $curl->get('www.andy87.ru/data')->asObject(); // object
+$respObject = $curl->get('www.andy87.ru/data')->asObject(); // object
 ```
 - Преобразует ответ в массив( array )
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$array = $curl->get('www.andy87.ru/data')->asArray(); // array
+$respArray = $curl->get('www.andy87.ru/data')->asArray(); // array
 ```
 - Текст ( string )
 ```php
 /** @var andy87\curl_requester\Curl $curl */
-/** @var andy87\curl_requester\entity\Response $request */
+/** @var andy87\curl_requester\entity\Response $response */
 
 $resp = $curl->get('www.andy87.ru')->response(); // string
 
 //Аналог
 
-$request = $curl->get('www.andy87.ru')->run(); // Вернёт объект класса `Response` (информацию о ответе)
-$resp = $request->response;
+$response = $curl->get('www.andy87.ru')->run(); // Вернёт объект класса `Response` (информацию о ответе)
+$resp     = $response->response;
 
 //Аналог(краткая запись)
 $resp = $curl->get('www.andy87.ru')->run()->response;
@@ -86,12 +92,12 @@ $resp = $curl->get('www.andy87.ru')->response();
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request  = $curl->post( 'www.andy87.ru')->run(); //Вернёт объект класса `Request` (данные запроса).
+$response  = $curl->post( 'www.andy87.ru')->run(); //Вернёт объект класса `Request` (данные запроса).
 
-$response = $request->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
-$httpCode = $request->httpCode; //Код ответа сервера
+$respArray = $response->asArray(); // ['name' => 'Андрей', 'do'=> 'code']
+$httpCode  = $response->httpCode; //Код ответа сервера
 
-$query    = $request->getQuery(); //Вернёт объект класса `Query` (информацию о запросе.)
+$query = $response->getQuery(); //Вернёт объект класса `Query` (информацию о запросе.)
 ```
 
 ### Информация о запросе.  
@@ -131,32 +137,31 @@ $isPost     = $query->isPost();
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post('www.crm.ru/get-user', ['id' => 123])
+$resp = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setTestResponse(json_encode(['name'=>'Андрей', 'do'=>'code']), 302 )
-    ...
+    ->response();
 ```
 ### Расширить/дополнить заголовки запроса
 - **addHeaders( *array* $array )** - добавляемые заголовки
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post('www.crm.ru/get-user', ['id' => 123])
+$resp = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->addHeaders(['Content-Type: application/json'])
-    ...
+    ->response();
 ```
 ### Подготовленные данные
 - **prepareParams( *string* $postField )** - данные для запроса не будут проходить обработку [http_build_query()](https://www.php.net/manual/ru/function.http-build-query.php) они считаются уже подготовленными для запроса
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post( 'www.vk.com/806034')
+$resp = $curl->post( 'www.vk.com/806034')
     ->prepareParams( http_build_query(['id' => 123]) )
-    ...
+    ->response();
     
 // Аналог
 $params = http_build_query(['id' => 123]);
-$request = $curl->post( 'www.vk.com/806034', $params )->prepareParams()
-    ...
+$resp   = $curl->post( 'www.vk.com/806034', $params )->prepareParams()->response();
 ```
 ### Использование Basic авторизации
 - **setBasicAuth( *string* $token )** - Добавляет в заголовки  
@@ -164,18 +169,18 @@ $request = $curl->post( 'www.vk.com/806034', $params )->prepareParams()
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post('www.crm.ru/get-user', ['id' => 123])
+$resp = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->setBasicAuth('eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9')
-    ...
+    ->response();
 ```
 ### Дополнительные cURL опции
 - **addCurlOptions( *array* $array )** - дополнительные опции cURL для [curl_setopt()](https://www.php.net/manual/ru/function.curl-setopt.php)
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
+$resp = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
     ->addCurlOptions([ CURLOPT_FOLLOWLOCATION => true])
-    ...
+    ->response();
 ```
 ### Использование Cookie
 - **useCookie( *string* $cookie, *string* $path )** - использование cookie. Задаются:  
@@ -185,9 +190,9 @@ $request = $curl->post('www.crm.ru/get-user/delete', ['id' => 123])
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post('www.crm.ru/get-user', ['id' => 123])
+$resp = $curl->post('www.crm.ru/get-user', ['id' => 123])
     ->useCookie('cookiename=cookievalue', '/tmp/cookies.txt')
-    ... 
+    ->response();
 ```
 
 ### Отключение проверки SSL
@@ -197,9 +202,9 @@ $request = $curl->post('www.crm.ru/get-user', ['id' => 123])
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
+$resp = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
     ->disableSSL()
-    ...  
+    ->response();
 ```
 ### Разрешение редиректа
 - **enableRedirect()** - разрешение на редирект, если ответ сервера требует редиректа. Задаётся:  
@@ -207,9 +212,9 @@ $request = $curl->post( 'www.crm.ru/get-user', ['id' => 123])
 ```php
 /** @var andy87\curl_requester\Curl $curl */
 
-$request = $curl->post( 'www.vk.com/806034')
+$resp = $curl->post( 'www.vk.com/806034')
     ->enableRedirect()
-    ...
+    ->response();
 ```
 
 ### Получение расширенной информации по запросу. 
@@ -245,7 +250,7 @@ $request->setCallback(function ( Query $query, $curlHandler )
     }
 });
 
-$response = $request->run()->response;
+$resp = $request->run()->response;
     ...
 ```
 
@@ -262,12 +267,12 @@ $ch = Request::createCurlHandler( 'www.vk.com/806034', [
     CURLOPT_POSTFIELDS      => [ 'some params' ]
 ]);
 
-$response  = curl_exec( $ch );
+$resp = curl_exec( $ch );
     
 curl_close($ch);
 
 // Аналог(кратная запись)
-$response = Request::createCurlHandler( 'www.vk.com/806034', [
+$resp = Request::createCurlHandler( 'www.vk.com/806034', [
     CURLOPT_RETURNTRANSFER  => true,
     CURLOPT_POST            => 1,
     CURLOPT_HTTPHEADER      => [ 'some headers' ],
