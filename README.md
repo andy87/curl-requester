@@ -292,16 +292,16 @@ $ch = Request::createCurlHandler( 'www.vk.com/806034', [
 ]);
 
 $resp = curl_exec( $ch );
-    
+
 curl_close($ch);
 
 // Аналог(кратная запись)
-$resp = Request::createCurlHandler( 'www.vk.com/806034', [
+$resp = Request::send( 'www.vk.com/806034', [
     CURLOPT_RETURNTRANSFER  => true,
     CURLOPT_POST            => 1,
     CURLOPT_HTTPHEADER      => [ 'some headers' ],
     CURLOPT_POSTFIELDS      => [ 'some params' ]
-], ( $is_return_response = true ) );
+]);
 ```
 
 <hr>
@@ -321,7 +321,7 @@ $resp = Request::createCurlHandler( 'www.vk.com/806034', [
 ```
 "require": {
     ...
-    "andy87/curl-requester" : "1.1.5"
+    "andy87/curl-requester" : "1.3.5"
 },
 ```
 <small>repositories</small>
@@ -332,7 +332,7 @@ $resp = Request::createCurlHandler( 'www.vk.com/806034', [
         "type"                  : "package",
         "package"               : {
             "name"                  : "andy87/curl-requester",
-            "version"               : "1.1.5",
+            "version"               : "1.3.5",
             "source"                : {
                 "type"                  : "git",
                 "reference"             : "main",
@@ -349,3 +349,13 @@ $resp = Request::createCurlHandler( 'www.vk.com/806034', [
     }
 ]
 ```
+
+## Log
+* ***1.3.5***
+  * Add: directory examples
+  * Update:
+    * `Request` 
+      * edit: createCurlHandler()
+      * add: send()
+    * ReadME
+

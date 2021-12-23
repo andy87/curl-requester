@@ -4,6 +4,7 @@
 
 use andy87\curl_requester\Curl;
 use andy87\curl_requester\entity\Query;
+use andy87\curl_requester\entity\Request;
 
 try {
 
@@ -63,6 +64,26 @@ try {
     $query = $response->getQuery();
 
     $resp = $response->response;
+
+
+    $ch = Request::createCurlHandler( 'www.vk.com/806034', [
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_POST            => 1,
+        CURLOPT_HTTPHEADER      => [ 'some headers' ],
+        CURLOPT_POSTFIELDS      => [ 'some params' ]
+    ]);
+
+    $resp = curl_exec( $ch );
+
+    curl_close($ch);
+
+    // Аналог(кратная запись)
+    $resp = Request::send( 'www.vk.com/806034', [
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_POST            => 1,
+        CURLOPT_HTTPHEADER      => [ 'some headers' ],
+        CURLOPT_POSTFIELDS      => [ 'some params' ]
+    ]);
 
 } catch ( Exception $e ) {
 

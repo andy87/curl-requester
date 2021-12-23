@@ -52,26 +52,33 @@ class Request
      *
      * @param string $url URL куда делается запрос
      * @param array $options опции для cURL
-     * @param bool $is_return_response сразу вернуть ответ, вместо resource cUrl
      *
-     * @return bool|resource|string
+     * @return resource
      */
-    public static function createCurlHandler( string $url, array $options = [], bool $is_return_response = false )
+    public static function createCurlHandler( string $url, array $options = [] )
     {
         $ch = curl_init( $url );
 
         curl_setopt_array( $ch, $options );
 
-        if ( $is_return_response )
-        {
-            $resp = curl_exec( $ch );
-
-            curl_close( $ch );
-
-            return $resp;
-        }
-
         return $ch;
+    }
+
+    /**
+     * @param string $url
+     * @param array $options
+     *
+     * @return bool|string
+     */
+    public static function send( string $url, array $options = [] )
+    {
+        $ch = self::createCurlHandler( $url, $options );
+
+        $resp = curl_exec( $ch );
+
+        curl_close( $ch );
+
+        return $resp;
     }
 
     /**
