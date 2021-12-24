@@ -70,7 +70,7 @@ try {
         CURLOPT_RETURNTRANSFER  => true,
         CURLOPT_POST            => 1,
         CURLOPT_HTTPHEADER      => [ 'some headers' ],
-        CURLOPT_POSTFIELDS      => [ 'some params' ]
+        CURLOPT_POSTFIELDS      => http_build_query([ 'some params' ])
     ]);
 
     $resp = curl_exec( $ch );
@@ -82,7 +82,7 @@ try {
         CURLOPT_RETURNTRANSFER  => true,
         CURLOPT_POST            => 1,
         CURLOPT_HTTPHEADER      => [ 'some headers' ],
-        CURLOPT_POSTFIELDS      => [ 'some params' ]
+        CURLOPT_POSTFIELDS      => http_build_query([ 'some params' ])
     ]);
 
 } catch ( Exception $e ) {
