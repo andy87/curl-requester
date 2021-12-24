@@ -312,6 +312,7 @@ $resp = Request::send( 'www.vk.com/806034', [
 - php ( >= 7.4 )
 - ext-curl
 - ext-json
+- ext-mbstring
 
 ## composer.json
 Установка с помощью [composer](https://getcomposer.org/download/)  
