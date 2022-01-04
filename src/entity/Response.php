@@ -7,8 +7,8 @@ namespace andy87\curl_requester\entity;
  *
  *  Класс аозвращается как ответ на запрос
  *
- * @property-read ?string $response
- * @property-read ?int $httpCode
+ * @property-read ?string $response Ответ сервера
+ * @property-read ?int $httpCode Код ответа
  *
  * @package andy87\curl_requester\entity
  */
@@ -39,10 +39,11 @@ class Response
     /**
      * Magic
      *
-     * @param $name
+     * @param string $name всё просто
+     *
      * @return mixed
      */
-    public function __get( $name )
+    public function __get( string $name )
     {
         return ( in_array( $name, $this->propertyList ) )
             ? $this->query->{$name}
@@ -69,8 +70,6 @@ class Response
 
     /**
      * возвращает ответ сервера как массив
-     *
-     * @property bool $asArray
      *
      * @return mixed
      */

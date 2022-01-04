@@ -2,7 +2,6 @@
 
 namespace andy87\curl_requester\entity;
 
-use andy87\curl_requester\Curl;
 use Exception;
 
 /**
@@ -121,7 +120,7 @@ abstract class Method
 
 
 
-    // Д О П  Ф У Н К Ц И О Н А Л
+    // Д О П.  Ф У Н К Ц И О Н А Л
 
     /**
      * Получить данные `headers`
@@ -295,8 +294,6 @@ abstract class Method
         return $this;
     }
 
-
-
     /**
      * Дополняет список информации по запросу которую надо получить
      *
@@ -319,6 +316,7 @@ abstract class Method
      * Отправка запроса
      *
      * @return Response
+     *
      * @throws Exception
      */
     public function run(): Response
@@ -330,6 +328,7 @@ abstract class Method
      * Получение ответа на запрос
      *
      * @return ?string
+     *
      * @throws Exception
      */
     public function response(): ?string
@@ -341,6 +340,7 @@ abstract class Method
      * Получение ответа на запрос в формате `Object`
      *
      * @return ?object
+     *
      * @throws Exception
      */
     public function asObject(): ?object
@@ -352,6 +352,7 @@ abstract class Method
      * Получение ответа на запрос в формате `Array`
      *
      * @return ?array
+     *
      * @throws Exception
      */
     public function asArray(): ?array
@@ -378,5 +379,4 @@ abstract class Method
     {
         return ( $this->tests[ self::KEY_RESPONSE ] || $this->tests[ self::KEY_HTTP_CODE ] );
     }
-
 }

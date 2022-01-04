@@ -24,6 +24,8 @@ class Request
     const EVENT_BEFORE_REQUEST  = 'before_request';
     const EVENT_AFTER_REQUEST   = 'after_request';
 
+
+
     // Property
 
     /** @var object|Method|Get|Post|Put|Patch|Head|Delete $query объект запроса */

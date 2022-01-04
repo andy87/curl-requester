@@ -19,19 +19,19 @@ use Exception;
  * @property array $info Список информации о запросе из `curl_getinfo()`
  * @property callable[] $behavior функции вызываемые при событиях
  *
- * @method isGet()
- * @method isPost()
- * @method isPut()
- * @method isPatch()
- * @method isHead()
- * @method isDelete()
+ * @method bool isGet() Проверка на тип метода.
+ * @method bool isPost() Проверка на тип метода.
+ * @method bool isPut() Проверка на тип метода.
+ * @method bool isPatch() Проверка на тип метода.
+ * @method bool isHead() Проверка на тип метода.
+ * @method bool isDelete() Проверка на тип метода.
  *
  * @package andy87\curl_requester\entity
  */
 class Query
 {
     // Constants
-
+    /** @var int  */
     const OK = 200;
 
 
