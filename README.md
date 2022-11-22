@@ -359,7 +359,8 @@ $resp = Request::send( 'www.vk.com/806034', [
 |--------------------|-----------------------------|
 | `composer update` | `php composer.phar update` |
 
-Если ваш проект не использует `composer` то необходимо прописать в файле использующем функционал `andy87/curl-requester`:
+Если ваш проект не использует `composer` то необходимо прописать в файле использующем функционал `andy87/curl-requester` путь к файлу `vendor/autoload.php`.
+Пример:  
 ```php
 include_once "vendor/autoload.php";
 ```
