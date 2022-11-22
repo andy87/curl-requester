@@ -351,17 +351,17 @@ $resp = Request::send( 'www.vk.com/806034', [
 ]
 ```
 
-Если **composer** не установлен локально, то скачать **composer.phar** с <a href="https://getcomposer.org/download/">официального сайта</a> в корневую дирекорию пргоекта. 
+Если **composer** не установлен локально, то скачать **composer.phar** с <a href="https://getcomposer.org/download/">официального сайта</a> в корневую дирекорию проекта. 
 
-Выполнить в консоле команды, если **composer** локально:  
+Далее. Выполнить в консоле команды, если **composer** локально:  
 
 | установлен         | не установлкн               |
 |--------------------|-----------------------------|
 | `composer 'command'` | `php composer.phar 'command'` |
   
 Команды для выполнения:  
-* update  
-* dump  
+1. update  
+2. dump  
   
   
 Если ваш проект не использует `composer` то необходимо прописать в файле использующем функционал `andy87/curl-requester` путь к файлу `vendor/autoload.php`.
