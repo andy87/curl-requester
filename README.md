@@ -351,6 +351,15 @@ $resp = Request::send( 'www.vk.com/806034', [
 ]
 ```
 
+Если **composer** не установлен локально, то скачать **composer.phar** с <a href="https://getcomposer.org/download/">официального сайта</a> в корневую дирекорию пргоекта. 
+
+Выполнить в консоле команду, если **composer** локально:  
+
+| установлен         | не установлкн               |
+|--------------------|-----------------------------|
+| `composer update` | `php composer.phar update` |
+
+
 ## Log
 * ***1.3.5***
   * Add: directory examples
