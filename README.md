@@ -322,7 +322,7 @@ $resp = Request::send( 'www.vk.com/806034', [
 ```
 "require": {
     ...
-    "andy87/curl-requester" : "1.3.5"
+    "andy87/curl-requester" : "dev-main"
 },
 ```
 <small>repositories</small>
@@ -330,45 +330,23 @@ $resp = Request::send( 'www.vk.com/806034', [
 "repositories": [
     ...,
     {
-        "type"                  : "package",
-        "package"               : {
-            "name"                  : "andy87/curl-requester",
-            "version"               : "1.3.5",
-            "source"                : {
-                "type"                  : "git",
-                "reference"             : "main",
-                "url"                   : "https://github.com/andy87/curl-requester"
-            },
-            "autoload": {
-                "psr-4": {
-                    "andy87\\curl_requester\\" : "src",
-                    "andy87\\curl_requester\\entity\\" : "src/entity",
-                    "andy87\\curl_requester\\entity\\methods\\": "src/entity/methods"
-                }
-            }
-        }
+      "url": "git@github.com:andy87/curl-requester.git",
+      "type": "vcs"
     }
 ]
 ```
 
-Если **composer** не установлен локально, то скачать **composer.phar** с <a href="https://getcomposer.org/download/">официального сайта</a> в корневую дирекорию проекта. 
 
-Далее. Выполнить в консоле команды, если **composer** локально:  
+Если **composer** не установлен локально, то скачать **composer.phar** с <a href="https://getcomposer.org/download/">официального сайта</a> в корневую дирекорию пргоекта.
 
-| установлен         | не установлкн               |
-|--------------------|-----------------------------|
-| `composer 'command'` | `php composer.phar 'command'` |
-  
-Команды для выполнения:  
-1. update  
-2. dump  
-  
-  
-Если ваш проект не использует `composer` то необходимо прописать в файле использующем функционал `andy87/curl-requester` путь к файлу `vendor/autoload.php`.
-Пример:  
-```php
-include_once "vendor/autoload.php";
-```
+Выполнить в консоле команду, если **composer** локально:
+
+| установлен        | не установлкн               |
+|-------------------|-----------------------------|
+| `composer update` | `php composer.phar update` |
+
+
+
 
 ## Log
 * ***1.3.5***
