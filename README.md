@@ -344,6 +344,7 @@ $resp = Request::send( 'www.vk.com/806034', [
 | установлен        | не установлкн               |
 |-------------------|-----------------------------|
 | `composer update` | `php composer.phar update` |
+| `composer dump`   | `php composer.phar dump` |
 
 
 
