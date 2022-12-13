@@ -13,5 +13,10 @@
       "type"      : "vcs",
       "url"       : "https://github.com/andy87/curl-requester"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "andy87\\curl_requester\\": "src"
+    }
+  }
 }
